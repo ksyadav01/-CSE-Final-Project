@@ -13,7 +13,8 @@ import { WNavbar, WSidebar, WNavItem } 	from 'wt-frontend';
 import { WLayout, WLHeader, WLMain, WLSide } from 'wt-frontend';
 import { UpdateListField_Transaction, 
 	UpdateListItems_Transaction, 
-	ReorderItems_Transaction, 
+	ReorderItems_Transaction,
+	ReorderItemsDescription_Transaction, 
 	EditItem_Transaction } 				from '../../utils/jsTPS';
 import WInput from 'wt-frontend/build/components/winput/WInput';
 
@@ -27,6 +28,7 @@ const Homescreen = (props) => {
 	const [showCreate, toggleShowCreate] 	= useState(false);
 
 	const [ReorderTodoItems] 		= useMutation(mutations.REORDER_ITEMS);
+	const [ReorderTodoItemsDescription] 		= useMutation(mutations.REORDER_ITEMS_DESC);
 	const [UpdateTodoItemField] 	= useMutation(mutations.UPDATE_ITEM_FIELD);
 	const [UpdateTodolistField] 	= useMutation(mutations.UPDATE_TODOLIST_FIELD);
 	const [DeleteTodolist] 			= useMutation(mutations.DELETE_TODOLIST);
@@ -73,6 +75,7 @@ const Homescreen = (props) => {
 	const addItem = async () => {
 		let list = activeList;
 		const items = list.items;
+		//const lastID = items.length >= 1 ? items[items.length - 1].id + 1 : 0;
 		const lastID = items.length >= 1 ? items[items.length - 1].id + 1 : 0;
 		const newItem = {
 			_id: '',
@@ -91,19 +94,19 @@ const Homescreen = (props) => {
 	};
 
 
-	const deleteItem = async (item) => {
+	const deleteItem = async (item, index) => {
 		let listID = activeList._id;
 		let itemID = item._id;
 		let opcode = 0;
 		let itemToDelete = {
-			_id: item._id,
+			_id: item.id,
 			id: item.id,
 			description: item.description,
 			due_date: item.due_date,
 			assigned_to: item.assigned_to,
 			completed: item.completed
 		}
-		let transaction = new UpdateListItems_Transaction(listID, itemID, itemToDelete, opcode, AddTodoItem, DeleteTodoItem);
+		let transaction = new UpdateListItems_Transaction(listID, itemID, itemToDelete, opcode, AddTodoItem, DeleteTodoItem, index);
 		props.tps.addTransaction(transaction);
 		tpsRedo();
 	};
@@ -125,6 +128,14 @@ const Homescreen = (props) => {
 		tpsRedo();
 
 	};
+	const reorderItemDescription = async () => {
+		let listID = activeList._id;
+		console.log("hehe")
+		let transaction = new ReorderItemsDescription_Transaction(listID, ReorderTodoItemsDescription);
+		props.tps.addTransaction(transaction);
+		tpsRedo();
+
+	};
 
 	const createNewList = async () => {
 		const length = todolists.length
@@ -135,6 +146,7 @@ const Homescreen = (props) => {
 			name: 'Untitled',
 			owner: props.user._id,
 			items: [],
+			
 		}
 		const { data } = await AddTodolist({ variables: { todolist: list }, refetchQueries: [{ query: GET_DB_TODOS }] });
 		setActiveList(list)
@@ -223,6 +235,7 @@ const Homescreen = (props) => {
 								<MainContents
 									addItem={addItem} deleteItem={deleteItem}
 									editItem={editItem} reorderItem={reorderItem}
+									reorderDescription={reorderItemDescription}
 									setShowDelete={setShowDelete}
 									activeList={activeList} setActiveList={setActiveList}
 								/>

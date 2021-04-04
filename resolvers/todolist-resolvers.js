@@ -36,15 +36,16 @@ module.exports = {
 			@returns {string} the objectID of the item or an error message
 		**/
 		addItem: async(_, args) => {
-			const { _id, item } = args;
+			const { _id, item , index } = args;
 			const listId = new ObjectId(_id);
 			const objectId = new ObjectId();
 			const found = await Todolist.findOne({_id: listId});
 			if(!found) return ('Todolist not found');
 			if(item._id === '') item._id = objectId;
 			let listItems = found.items;
-			listItems.push(item);
-			
+			if(index < 0) listItems.push(item);
+   			else listItems.splice(index, 0, item);
+			console.log(listItems)
 			const updated = await Todolist.updateOne({_id: listId}, { items: listItems });
 
 			if(updated) return (item._id);
@@ -157,6 +158,37 @@ module.exports = {
 				listItems[index - 1] = current;
 				listItems[index] = prev;
 			}
+			const updated = await Todolist.updateOne({_id: listId}, { items: listItems })
+			if(updated) return (listItems);
+			// return old ordering if reorder was unsuccessful
+			listItems = found.items;
+			return (found.items);
+
+		},
+		reorderItemsDescription: async (_, args) => {
+			const { _id} = args;
+			const listId = new ObjectId(_id);
+			const found = await Todolist.findOne({_id: listId});
+			let listItems = found.items;
+			//const index = listItems.findIndex(item => item._id.toString() === itemId);
+			// move selected item visually down the list
+			/*
+			if(direction === 1 && index < listItems.length - 1) {
+				let next = listItems[index + 1];
+				let current = listItems[index]
+				listItems[index + 1] = current;
+				listItems[index] = next;
+			}
+			// move selected item visually up the list
+			else if(direction === -1 && index > 0) {
+				let prev = listItems[index - 1];
+				let current = listItems[index]
+				listItems[index - 1] = current;
+				listItems[index] = prev;
+			}
+			*/
+			console.log("joe mama")
+			listItems.sort((a,b) => a.description.localeCompare(b.description))
 			const updated = await Todolist.updateOne({_id: listId}, { items: listItems })
 			if(updated) return (listItems);
 			// return old ordering if reorder was unsuccessful
