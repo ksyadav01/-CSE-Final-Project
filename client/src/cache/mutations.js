@@ -85,6 +85,30 @@ export const REORDER_ITEMS_DESC = gql`
 		}
 	}
 `;
+export const REORDER_ITEMS_DATE = gql`
+	mutation ReorderItemsDate($_id: String!) {
+		reorderItemsDate(_id: $_id) {
+			_id
+			id
+			description
+			due_date
+			assigned_to
+			completed
+		}
+	}
+`;
+export const REORDER_ITEMS_STATUS= gql`
+	mutation ReorderItemsStatus($_id: String!) {
+		reorderItemsStatus(_id: $_id) {
+			_id
+			id
+			description
+			due_date
+			assigned_to
+			completed
+		}
+	}
+`;
 
 export const ADD_TODOLIST = gql`
 	mutation AddTodolist($todolist: TodoInput!) {

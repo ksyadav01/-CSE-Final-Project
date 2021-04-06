@@ -170,23 +170,6 @@ module.exports = {
 			const listId = new ObjectId(_id);
 			const found = await Todolist.findOne({_id: listId});
 			let listItems = found.items;
-			//const index = listItems.findIndex(item => item._id.toString() === itemId);
-			// move selected item visually down the list
-			/*
-			if(direction === 1 && index < listItems.length - 1) {
-				let next = listItems[index + 1];
-				let current = listItems[index]
-				listItems[index + 1] = current;
-				listItems[index] = next;
-			}
-			// move selected item visually up the list
-			else if(direction === -1 && index > 0) {
-				let prev = listItems[index - 1];
-				let current = listItems[index]
-				listItems[index - 1] = current;
-				listItems[index] = prev;
-			}
-			*/
 			console.log("joe mama")
 			listItems.sort((a,b) => a.description.localeCompare(b.description))
 			const updated = await Todolist.updateOne({_id: listId}, { items: listItems })
@@ -195,7 +178,62 @@ module.exports = {
 			listItems = found.items;
 			return (found.items);
 
+		},
+		
+		reorderItemsDate: async (_, args) => {
+			const { _id} = args;
+			const listId = new ObjectId(_id);
+			const found = await Todolist.findOne({_id: listId});
+			let listItems = found.items;
+			console.log("joe mama")
+			
+			//listItems.sort((a,b) => a.due_date.localeCompare(b.due_date))
+			listItems.sort(function(a,b){
+				
+					if(a.due_date==b.due_date)
+						return 0
+					if(b.due_date=="No Date")
+						return -1
+					if(a.due_date=="No Date")
+						return 1
+					date1=a.due_date.split("-")
+					date2=b.due_date.split("-")
+					if(parseInt(date1[0])>parseInt(date2[0]))
+						return 1
+					if(parseInt(date1[0])<parseInt(date2[0]))
+						return -1
+					if(parseInt(date1[1])>parseInt(date2[1]))
+						return 1
+					if(parseInt(date1[1])<parseInt(date2[1]))
+						return -1
+					if(parseInt(date1[2])>parseInt(date2[2]))
+						return 1
+					if(parseInt(date1[2])<parseInt(date2[2]))
+						return -1
+				
+			})
+			const updated = await Todolist.updateOne({_id: listId}, { items: listItems })
+			if(updated) return (listItems);
+			// return old ordering if reorder was unsuccessful
+			listItems = found.items;
+			return (found.items);
+
+		},
+		reorderItemsStatus: async (_, args) => {
+			const { _id} = args;
+			const listId = new ObjectId(_id);
+			const found = await Todolist.findOne({_id: listId});
+			let listItems = found.items;
+			console.log("joe mama")
+			listItems.sort((a,b) => a.completed.toString().localeCompare(b.completed.toString()	))
+			const updated = await Todolist.updateOne({_id: listId}, { items: listItems })
+			if(updated) return (listItems);
+			// return old ordering if reorder was un	successful
+			listItems = found.items;
+			return (found.items);
+
 		}
 
 	}
+
 }

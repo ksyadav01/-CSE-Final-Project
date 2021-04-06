@@ -15,6 +15,8 @@ import { UpdateListField_Transaction,
 	UpdateListItems_Transaction, 
 	ReorderItems_Transaction,
 	ReorderItemsDescription_Transaction, 
+	ReorderItemsDate_Transaction, 
+	ReorderItemsStatus_Transaction, 
 	EditItem_Transaction } 				from '../../utils/jsTPS';
 import WInput from 'wt-frontend/build/components/winput/WInput';
 
@@ -29,6 +31,8 @@ const Homescreen = (props) => {
 
 	const [ReorderTodoItems] 		= useMutation(mutations.REORDER_ITEMS);
 	const [ReorderTodoItemsDescription] 		= useMutation(mutations.REORDER_ITEMS_DESC);
+	const [ReorderTodoItemsDate] 		= useMutation(mutations.REORDER_ITEMS_DATE);
+	const [ReorderTodoItemsStatus] 		= useMutation(mutations.REORDER_ITEMS_STATUS);
 	const [UpdateTodoItemField] 	= useMutation(mutations.UPDATE_ITEM_FIELD);
 	const [UpdateTodolistField] 	= useMutation(mutations.UPDATE_TODOLIST_FIELD);
 	const [DeleteTodolist] 			= useMutation(mutations.DELETE_TODOLIST);
@@ -136,6 +140,22 @@ const Homescreen = (props) => {
 		tpsRedo();
 
 	};
+	const reorderItemDate = async () => {
+		let listID = activeList._id;
+		console.log("hehe1")
+		let transaction = new ReorderItemsDate_Transaction(listID, ReorderTodoItemsDate);
+		props.tps.addTransaction(transaction);
+		tpsRedo();
+
+	};
+	const reorderItemStatus = async () => {
+		let listID = activeList._id;
+		console.log("hehe2")
+		let transaction = new ReorderItemsStatus_Transaction(listID, ReorderTodoItemsStatus);
+		props.tps.addTransaction(transaction);
+		tpsRedo();
+
+	};
 
 	const createNewList = async () => {
 		const length = todolists.length
@@ -146,10 +166,15 @@ const Homescreen = (props) => {
 			name: 'Untitled',
 			owner: props.user._id,
 			items: [],
-			
+
 		}
 		const { data } = await AddTodolist({ variables: { todolist: list }, refetchQueries: [{ query: GET_DB_TODOS }] });
-		setActiveList(list)
+		await refetchTodos(refetch);
+		if(data) {
+			let _id = data.addTodolist;
+			let newList = todolists.find(list => list._id === _id);
+			setActiveList(newList)
+		}
 	};
 
 	const deleteList = async (_id) => {
@@ -236,6 +261,8 @@ const Homescreen = (props) => {
 									addItem={addItem} deleteItem={deleteItem}
 									editItem={editItem} reorderItem={reorderItem}
 									reorderDescription={reorderItemDescription}
+									reorderDate={reorderItemDate}
+									reorderStatus={reorderItemStatus}
 									setShowDelete={setShowDelete}
 									activeList={activeList} setActiveList={setActiveList}
 								/>
