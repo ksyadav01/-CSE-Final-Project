@@ -11,6 +11,7 @@ const MainContents = (props) => {
                 reorderDescription={props.reorderDescription}
                 reorderDate = {props.reorderDate}
                 reorderStatus={props.reorderStatus}
+                closeList={props.closeList}
                 ></TableHeader>
             <TableContents
                 key={props.activeList._id} activeList={props.activeList}

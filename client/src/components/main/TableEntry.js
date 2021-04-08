@@ -31,9 +31,9 @@ const TableEntry = (props) => {
 
     const handleAssignEdit = (e) => {
         toggleAssignEdit(false);
-        const newAssign = e.target.value ? e.target.value : 'None';
+        const newAssign = e.target.value ? e.target.value : 'Not Assigned';
         const prevAssign = assignTo;
-        props.editItem(data._id, 'assignTo', newAssign, prevAssign);
+        props.editItem(data._id, 'assigned_to', newAssign, prevAssign);
     };
 
     const handleStatusEdit = (e) => {
@@ -98,6 +98,7 @@ const TableEntry = (props) => {
                         />
                         : <div className="table-text"
                             onClick={() => toggleAssignEdit(!editingAssignTo)}
+                            style={status=="complete" ? {color: "black"}:{color:"red"}}
                         >{assignTo}
                         </div>
                 }

@@ -5,7 +5,9 @@ import { WButton, WRow, WCol } from 'wt-frontend';
 const TableHeader = (props) => {
 
     const buttonStyle = props.disabled ? ' table-header-button-disabled ' : 'table-header-button ';
-    const clickDisabled = () => { };
+    const clickDisabled = () => {
+        
+     };
 
     return (
         <WRow className="table-header">

@@ -17,7 +17,8 @@ import { UpdateListField_Transaction,
 	ReorderItemsDescription_Transaction, 
 	ReorderItemsDate_Transaction, 
 	ReorderItemsStatus_Transaction, 
-	EditItem_Transaction } 				from '../../utils/jsTPS';
+	EditItem_Transaction,
+	clearAllTransactions } 				from '../../utils/jsTPS';
 import WInput from 'wt-frontend/build/components/winput/WInput';
 
 
@@ -86,7 +87,8 @@ const Homescreen = (props) => {
 			id: lastID,
 			description: 'No Description',
 			due_date: 'No Date',
-			assigned_to: props.user._id,
+			//assigned_to: props.user._id,
+			assigned_to: 'Not Assigned',
 			completed: false
 		};
 		let opcode = 1;
@@ -214,6 +216,7 @@ const Homescreen = (props) => {
 	};
 
 	const setShowDelete = () => {
+		props.tps.clearAllTransactions();
 		toggleShowCreate(false);
 		toggleShowLogin(false);
 		toggleShowDelete(!showDelete)
@@ -265,6 +268,7 @@ const Homescreen = (props) => {
 									reorderStatus={reorderItemStatus}
 									setShowDelete={setShowDelete}
 									activeList={activeList} setActiveList={setActiveList}
+									closeList={props.tps.clearAllTransactions}
 								/>
 							</div>
 						:
