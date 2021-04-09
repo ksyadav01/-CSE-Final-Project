@@ -64,7 +64,8 @@ module.exports = {
 				id: id,
 				name: name,
 				owner: owner,
-				items: items
+				items: items,
+				prevItems: items
 			});
 			const updated = newList.save();
 			if(updated) return objectId;
@@ -166,33 +167,45 @@ module.exports = {
 
 		},
 		reorderItemsDescription: async (_, args) => {
-			const { _id, sort} = args;
+			const { _id} = args;
 			const listId = new ObjectId(_id);
 			let found = await Todolist.findOne({_id: listId});
 			let listItems = found.items;
-			console.log("joe mama")
-			console.log(sort)
-			if(sort==1){
-				Todolist.updateOne({_id: listId}, { prevItems: listItems })
-				listItems.sort((a,b) => a.description.localeCompare(b.description))
-				const updated = await Todolist.updateOne({_id: listId}, { items: listItems })
-				found =  Todolist.findOne({_id: listId});
-				console.log(found.prevItems)
-				if(updated) return (listItems);
-				// return old ordering if reorder was unsuccessful
-				listItems = found.items;
+			let dupItems = []
+			for(let i=0; i< listItems.length; i++){
+				dupItems.push(listItems[i])
 			}
-			else{
-				found =  Todolist.findOne({_id: listId});
-				Todolist.updateOne({_id: listId}, { items: found.prevItems })
-				Todolist.updateOne({_id: listId}, { prevItems: listItems })
-				found =  Todolist.findOne({_id: listId});
-				console.log(found.prevItems)
-
+			let isSorted=true
+			await listItems.sort((a,b) => a.description.localeCompare(b.description))
+			for(let i=0; i< listItems.length; i++){
+				if (listItems[i]!=dupItems[i]){
+					isSorted = false;
+					break;
+				}
 			}
-			found =  Todolist.findOne({_id: listId});
+			if (isSorted==true){
+				listItems.sort((a,b) => b.description.localeCompare(a.description))
+			}
+			const updated = await Todolist.updateOne({_id: listId}, { items: listItems })
+			console.log("asd")
+			if(updated) return (listItems);
+			// return old ordering if reorder was unsuccessful
+			listItems = found.items;
 			return (found.items);
+		},
 
+		reorderItemsDescription1: async (_, args) => {
+			console.log("bjhkdshbjsdabjkhasdbkj")
+			const { _id, items} = args;
+			const listId = new ObjectId(_id);
+			let found = await Todolist.findOne({_id: listId});
+			let listItems = found.items;
+			//listItems.sort((a,b) => a.description.localeCompare(b.description))
+			const updated = await Todolist.updateOne({_id: listId}, { items: items })
+			if(updated) return (listItems);
+			// return old ordering if reorder was unsuccessful
+			listItems = found.items;
+			return (found.items);
 		},
 		
 		reorderItemsDate: async (_, args) => {
@@ -200,8 +213,12 @@ module.exports = {
 			const listId = new ObjectId(_id);
 			const found = await Todolist.findOne({_id: listId});
 			let listItems = found.items;
-			console.log("joe mama")
-			
+			let dupItems = []
+			for(let i=0; i< listItems.length; i++){
+				dupItems.push(listItems[i])
+			}
+
+			let isSorted=true
 			//listItems.sort((a,b) => a.due_date.localeCompare(b.due_date))
 			listItems.sort(function(a,b){
 				
@@ -226,7 +243,39 @@ module.exports = {
 					if(parseInt(date1[2])<parseInt(date2[2]))
 						return -1
 				
-			})
+			});
+			for(let i=0; i< listItems.length; i++){
+				if (listItems[i]!=dupItems[i]){
+					isSorted = false;
+					break;
+				}
+			}
+			if (isSorted==true){
+				listItems.sort(function(a,b){
+				
+					if(b.due_date==a.due_date)
+						return 0
+					if(a.due_date=="No Date")
+						return -1
+					if(b.due_date=="No Date")
+						return 1
+					date1=a.due_date.split("-")
+					date2=b.due_date.split("-")
+					if(parseInt(date1[0])>parseInt(date2[0]))
+						return -1
+					if(parseInt(date1[0])<parseInt(date2[0]))
+						return 1
+					if(parseInt(date1[1])>parseInt(date2[1]))
+						return -1
+					if(parseInt(date1[1])<parseInt(date2[1]))
+						return 1
+					if(parseInt(date1[2])>parseInt(date2[2]))
+						return -1
+					if(parseInt(date1[2])<parseInt(date2[2]))
+						return 1
+				
+			});
+			}
 			const updated = await Todolist.updateOne({_id: listId}, { items: listItems })
 			if(updated) return (listItems);
 			// return old ordering if reorder was unsuccessful
@@ -239,8 +288,23 @@ module.exports = {
 			const listId = new ObjectId(_id);
 			const found = await Todolist.findOne({_id: listId});
 			let listItems = found.items;
-			console.log("joe mama")
+			let dupItems = []
+			for(let i=0; i< listItems.length; i++){
+				dupItems.push(listItems[i])
+			}
+
+			let isSorted=true
+
 			listItems.sort((a,b) => a.completed.toString().localeCompare(b.completed.toString()	))
+			for(let i=0; i< listItems.length; i++){
+				if (listItems[i]!=dupItems[i]){
+					isSorted = false;
+					break;
+				}
+			}
+			if (isSorted==true){
+				listItems.sort((a,b) => b.completed.toString().localeCompare(a.completed.toString()	))
+			}
 			const updated = await Todolist.updateOne({_id: listId}, { items: listItems })
 			if(updated) return (listItems);
 			// return old ordering if reorder was un	successful

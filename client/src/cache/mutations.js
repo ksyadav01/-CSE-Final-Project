@@ -12,7 +12,7 @@ export const LOGIN = gql`
 		}
 	}
 `;
-
+	
 export const REGISTER = gql`
 	mutation Register($email: String!, $password: String!, $firstName: String!, $lastName: String!) {
 		register(email: $email, password: $password, firstName: $firstName, lastName: $lastName) {
@@ -74,8 +74,20 @@ export const REORDER_ITEMS = gql`
 	}
 `;
 export const REORDER_ITEMS_DESC = gql`
-	mutation ReorderItemsDescription($_id: String!, $sort: Int!) {
-		reorderItemsDescription(_id: $_id, sort: $sort) {
+	mutation ReorderItemsDescription($_id: String!) {
+		reorderItemsDescription(_id: $_id) {
+			_id
+			id
+			description
+			due_date
+			assigned_to
+			completed
+		}
+	}
+`;
+export const REORDER_ITEMS_DESC1 = gql`
+	mutation ReorderItemsDescription1($_id: String!, $items: [ItemInput]) {
+		reorderItemsDescription1(_id: $_id, items: $items) {
 			_id
 			id
 			description

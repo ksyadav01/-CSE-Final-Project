@@ -8,7 +8,6 @@ const typeDefs = gql `
 		name: String!
 		owner: String!
 		items: [Item]
-		prevItems: [Item]
 	}
 	type Item {
 		_id: String!
@@ -30,7 +29,8 @@ const typeDefs = gql `
 		updateTodolistField(_id: String!, field: String!, value: String!): String
 		updateItemField(itemId: String!, _id: String!, field: String!, value: String!, flag: Int!): [Item]
 		reorderItems(itemId: String!, _id: String!, direction: Int!): [Item]
-		reorderItemsDescription( _id: String!, sort: Int!):[Item]
+		reorderItemsDescription( _id: String!):[Item]
+		reorderItemsDescription1( _id: String!, items: [ItemInput]):[Item]
 		reorderItemsDate( _id: String!):[Item]
 		reorderItemsStatus( _id: String!):[Item]
 	}
@@ -45,6 +45,7 @@ const typeDefs = gql `
 		name: String
 		owner: String
 		items: [ItemInput]
+		prevItems: [ItemInput]
 	}
 	input ItemInput {
 		_id: String

@@ -48,17 +48,22 @@ export class ReorderItems_Transaction extends jsTPS_Transaction {
 }
 
 export class ReorderItemsDescription_Transaction extends jsTPS_Transaction {   
-    constructor(listID, callback) {
+    constructor(listID, items, callback1, callback2) {
         super();
         this.listID = listID;
-		this.updateFunction = callback;
+        this.items = items
+		this.updateFunction1 = callback1;
+		this.updateFunction2 = callback2;
 	}
     async doTransaction() {
-		const { data } = await this.updateFunction({ variables: {_id: this.listID, sort: 1}});
+        console.log("sdadssdsad")
+		const { data } = await this.updateFunction1({ variables: {_id: this.listID}});
 		return data;
     }
     async undoTransaction() {
-		const {data} = await this.updateFunction({ variables: {_id: this.listID, sort: 2}});
+        console.log("sdadssdsadasdsa")
+		const {data} = await this.updateFunction2({ variables: {_id: this.listID, items: this.items}});
+        console.log("fnjkdsfkjn")
 		return data;
     }
 }

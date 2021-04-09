@@ -32,6 +32,7 @@ const Homescreen = (props) => {
 
 	const [ReorderTodoItems] 		= useMutation(mutations.REORDER_ITEMS);
 	const [ReorderTodoItemsDescription] 		= useMutation(mutations.REORDER_ITEMS_DESC);
+	const [ReorderTodoItemsDescription1] 		= useMutation(mutations.REORDER_ITEMS_DESC1);
 	const [ReorderTodoItemsDate] 		= useMutation(mutations.REORDER_ITEMS_DATE);
 	const [ReorderTodoItemsStatus] 		= useMutation(mutations.REORDER_ITEMS_STATUS);
 	const [UpdateTodoItemField] 	= useMutation(mutations.UPDATE_ITEM_FIELD);
@@ -136,8 +137,9 @@ const Homescreen = (props) => {
 	};
 	const reorderItemDescription = async () => {
 		let listID = activeList._id;
-		console.log("hehe")
-		let transaction = new ReorderItemsDescription_Transaction(listID, ReorderTodoItemsDescription);
+		let items = activeList.items;
+		console.log(items)
+		let transaction = new ReorderItemsDescription_Transaction(listID, items, ReorderTodoItemsDescription, ReorderTodoItemsDescription1);
 		props.tps.addTransaction(transaction);
 		tpsRedo();
 
@@ -168,6 +170,7 @@ const Homescreen = (props) => {
 			name: 'Untitled',
 			owner: props.user._id,
 			items: [],
+			prevItems: [],
 
 		}
 		const { data } = await AddTodolist({ variables: { todolist: list }, refetchQueries: [{ query: GET_DB_TODOS }] });
