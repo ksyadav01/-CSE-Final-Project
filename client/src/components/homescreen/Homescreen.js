@@ -104,9 +104,10 @@ const Homescreen = (props) => {
 	const deleteItem = async (item, index) => {
 		let listID = activeList._id;
 		let itemID = item._id;
+		console.log(itemID)
 		let opcode = 0;
 		let itemToDelete = {
-			_id: item.id,
+			_id: item._id,
 			id: item.id,
 			description: item.description,
 			due_date: item.due_date,
@@ -138,24 +139,26 @@ const Homescreen = (props) => {
 	const reorderItemDescription = async () => {
 		let listID = activeList._id;
 		let items = activeList.items;
-		console.log(items)
-		let transaction = new ReorderItemsDescription_Transaction(listID, items, ReorderTodoItemsDescription, ReorderTodoItemsDescription1);
+		let transaction = new ReorderItemsDescription_Transaction(listID, items, 
+			ReorderTodoItemsDescription, ReorderTodoItemsDescription1);
 		props.tps.addTransaction(transaction);
 		tpsRedo();
 
 	};
 	const reorderItemDate = async () => {
 		let listID = activeList._id;
-		console.log("hehe1")
-		let transaction = new ReorderItemsDate_Transaction(listID, ReorderTodoItemsDate);
+		let items = activeList.items;
+		let transaction = new ReorderItemsDate_Transaction(listID, items, 
+			ReorderTodoItemsDate, ReorderTodoItemsDescription1);
 		props.tps.addTransaction(transaction);
 		tpsRedo();
 
 	};
 	const reorderItemStatus = async () => {
 		let listID = activeList._id;
-		console.log("hehe2")
-		let transaction = new ReorderItemsStatus_Transaction(listID, ReorderTodoItemsStatus);
+		let items = activeList.items;
+		let transaction = new ReorderItemsStatus_Transaction(listID, items,
+			 ReorderTodoItemsStatus, ReorderTodoItemsDescription1);
 		props.tps.addTransaction(transaction);
 		tpsRedo();
 
@@ -170,7 +173,6 @@ const Homescreen = (props) => {
 			name: 'Untitled',
 			owner: props.user._id,
 			items: [],
-			prevItems: [],
 
 		}
 		const { data } = await AddTodolist({ variables: { todolist: list }, refetchQueries: [{ query: GET_DB_TODOS }] });

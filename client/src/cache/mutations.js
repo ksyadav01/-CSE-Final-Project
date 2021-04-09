@@ -86,8 +86,8 @@ export const REORDER_ITEMS_DESC = gql`
 	}
 `;
 export const REORDER_ITEMS_DESC1 = gql`
-	mutation ReorderItemsDescription1($_id: String!, $items: [ItemInput]) {
-		reorderItemsDescription1(_id: $_id, items: $items) {
+	mutation ReorderItemsDescription1($_id: String!, $originalItems: [ItemInput]!) {
+		reorderItemsDescription1(_id: $_id, originalItems: $originalItems) {
 			_id
 			id
 			description

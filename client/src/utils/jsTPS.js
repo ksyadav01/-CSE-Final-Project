@@ -61,39 +61,77 @@ export class ReorderItemsDescription_Transaction extends jsTPS_Transaction {
 		return data;
     }
     async undoTransaction() {
-        console.log("sdadssdsadasdsa")
-		const {data} = await this.updateFunction2({ variables: {_id: this.listID, items: this.items}});
-        console.log("fnjkdsfkjn")
+        let newList = []
+        for (let i=0; i<this.items.length; i++){
+            let newItem = {
+                _id: this.items[i]._id,
+                id: this.items[i].id,
+                description: this.items[i].description,
+                due_date: this.items[i].due_date,
+                assigned_to: this.items[i].assigned_to,
+                completed: this.items[i].completed
+            }
+            newList.push(newItem);
+        }
+		const {data} = await this.updateFunction2({ variables: {_id: this.listID, originalItems: newList}});
 		return data;
     }
 }
 export class ReorderItemsDate_Transaction extends jsTPS_Transaction {   
-    constructor(listID, callback) {
+    constructor(listID, items, callback1, callback2) {
         super();
         this.listID = listID;
-		this.updateFunction = callback;
+        this.items = items
+		this.updateFunction1 = callback1;
+		this.updateFunction2 = callback2;
 	}
     async doTransaction() {
-		const { data } = await this.updateFunction({ variables: {_id: this.listID}});
+		const { data } = await this.updateFunction1({ variables: {_id: this.listID}});
 		return data;
     }
     async undoTransaction() {
-		const {data} = await this.updateFunction({ variables: {_id: this.listID}});
+        let newList = []
+        for (let i=0; i<this.items.length; i++){
+            let newItem = {
+                _id: this.items[i]._id,
+                id: this.items[i].id,
+                description: this.items[i].description,
+                due_date: this.items[i].due_date,
+                assigned_to: this.items[i].assigned_to,
+                completed: this.items[i].completed
+            }
+            newList.push(newItem);
+        }
+		const {data} = await this.updateFunction2({ variables: {_id: this.listID, originalItems: newList}});
 		return data;
     }
 }
 export class ReorderItemsStatus_Transaction extends jsTPS_Transaction {   
-    constructor(listID, callback) {
+    constructor(listID, items, callback1, callback2) {
         super();
         this.listID = listID;
-		this.updateFunction = callback;
+        this.items = items
+		this.updateFunction1 = callback1;
+		this.updateFunction2 = callback2;
 	}
     async doTransaction() {
-		const { data } = await this.updateFunction({ variables: {_id: this.listID}});
+		const { data } = await this.updateFunction1({ variables: {_id: this.listID}});
 		return data;
     }
     async undoTransaction() {
-		const {data} = await this.updateFunction({ variables: {_id: this.listID}});
+        let newList = []
+        for (let i=0; i<this.items.length; i++){
+            let newItem = {
+                _id: this.items[i]._id,
+                id: this.items[i].id,
+                description: this.items[i].description,
+                due_date: this.items[i].due_date,
+                assigned_to: this.items[i].assigned_to,
+                completed: this.items[i].completed
+            }
+            newList.push(newItem);
+        }
+		const {data} = await this.updateFunction2({ variables: {_id: this.listID, originalItems: newList}});
 		return data;
     }
 }
@@ -148,7 +186,7 @@ export class UpdateListItems_Transaction extends jsTPS_Transaction {
     async doTransaction() {
 		let data;
         this.opcode === 0 ? { data } = await this.deleteFunction({
-                            variables: {item: this.item, _id: this.listID, index: this.index}})
+                            variables: {itemId: this.itemID, _id: this.listID}})
 						  : { data } = await this.addFunction({
 							variables: {item: this.item, _id: this.listID, index: this.index}})  
 		if(this.opcode !== 0) {
@@ -160,7 +198,7 @@ export class UpdateListItems_Transaction extends jsTPS_Transaction {
     async undoTransaction() {
 		let data;
         this.opcode === 1 ? { data } = await this.deleteFunction({
-                            variables: {item: this.item, _id: this.listID, index: this.index}})
+                            variables: {itemId: this.itemID, _id: this.listID}})
                           : { data } = await this.addFunction({
 							variables: {item: this.item, _id: this.listID, index: this.index}})
 		if(this.opcode !== 1) {

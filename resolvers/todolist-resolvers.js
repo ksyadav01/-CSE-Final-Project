@@ -77,6 +77,7 @@ module.exports = {
 							 array on failure
 		**/
 		deleteItem: async (_, args) => {
+			console.log("dfssimone sucksnklsdakjnsd")
 			const  { _id, itemId } = args;
 			const listId = new ObjectId(_id);
 			const found = await Todolist.findOne({_id: listId});
@@ -196,12 +197,12 @@ module.exports = {
 
 		reorderItemsDescription1: async (_, args) => {
 			console.log("bjhkdshbjsdabjkhasdbkj")
-			const { _id, items} = args;
+			const { _id, originalItems} = args;
 			const listId = new ObjectId(_id);
 			let found = await Todolist.findOne({_id: listId});
 			let listItems = found.items;
 			//listItems.sort((a,b) => a.description.localeCompare(b.description))
-			const updated = await Todolist.updateOne({_id: listId}, { items: items })
+			const updated = await Todolist.updateOne({_id: listId}, { items: originalItems })
 			if(updated) return (listItems);
 			// return old ordering if reorder was unsuccessful
 			listItems = found.items;
