@@ -166,16 +166,31 @@ module.exports = {
 
 		},
 		reorderItemsDescription: async (_, args) => {
-			const { _id} = args;
+			const { _id, sort} = args;
 			const listId = new ObjectId(_id);
-			const found = await Todolist.findOne({_id: listId});
+			let found = await Todolist.findOne({_id: listId});
 			let listItems = found.items;
 			console.log("joe mama")
-			listItems.sort((a,b) => a.description.localeCompare(b.description))
-			const updated = await Todolist.updateOne({_id: listId}, { items: listItems })
-			if(updated) return (listItems);
-			// return old ordering if reorder was unsuccessful
-			listItems = found.items;
+			console.log(sort)
+			if(sort==1){
+				Todolist.updateOne({_id: listId}, { prevItems: listItems })
+				listItems.sort((a,b) => a.description.localeCompare(b.description))
+				const updated = await Todolist.updateOne({_id: listId}, { items: listItems })
+				found =  Todolist.findOne({_id: listId});
+				console.log(found.prevItems)
+				if(updated) return (listItems);
+				// return old ordering if reorder was unsuccessful
+				listItems = found.items;
+			}
+			else{
+				found =  Todolist.findOne({_id: listId});
+				Todolist.updateOne({_id: listId}, { items: found.prevItems })
+				Todolist.updateOne({_id: listId}, { prevItems: listItems })
+				found =  Todolist.findOne({_id: listId});
+				console.log(found.prevItems)
+
+			}
+			found =  Todolist.findOne({_id: listId});
 			return (found.items);
 
 		},

@@ -43,19 +43,19 @@ const CreateAccount = (props) => {
 	return (
         // Replace div with WModal
 
-		<div className="signup-modal">
-			<div className="modal-header" onClose={() => props.setShowCreate(false)}>
+		<WModal visible={true}>
+			<WMHeader onClose={() => props.setShowCreate(false)}>
 				Sign Up
-			</div>
+			</WMHeader>
 
 			{
 				loading ? <div />
 					: <div>
-						<WRow className="modal-col-gap signup-modal">
+						<WRow>
 							<WCol size="6">
 								<WInput 
 									className="" onBlur={updateInput} name="firstName" labelAnimation="up" 
-									barAnimation="solid" labelText="First Name" wType="outlined" inputType="text" 
+									barAnimation="solid" labelText="First Name" wType="outlined" inputType="text"
 								/>
 							</WCol>
 							<WCol size="6">
@@ -81,7 +81,7 @@ const CreateAccount = (props) => {
 			<WButton className="modal-button" onClick={handleCreateAccount} span clickAnimation="ripple-light" hoverAnimation="darken" shape="rounded" color="primary">
 				Submit
 			</WButton>
-		</div>
+		</WModal>
 	);
 }
 

@@ -54,11 +54,11 @@ export class ReorderItemsDescription_Transaction extends jsTPS_Transaction {
 		this.updateFunction = callback;
 	}
     async doTransaction() {
-		const { data } = await this.updateFunction({ variables: {_id: this.listID}});
+		const { data } = await this.updateFunction({ variables: {_id: this.listID, sort: 1}});
 		return data;
     }
     async undoTransaction() {
-		const {data} = await this.updateFunction({ variables: {_id: this.listID}});
+		const {data} = await this.updateFunction({ variables: {_id: this.listID, sort: 2}});
 		return data;
     }
 }

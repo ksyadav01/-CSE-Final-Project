@@ -106,10 +106,12 @@ const TableEntry = (props) => {
 
             <WCol size="3">
                 <div className='button-group'>
-                    <WButton className="table-entry-buttons" onClick={() => props.reorderItem(data._id, -1)} wType="texted">
+                    <WButton className="table-entry-buttons" onClick={() => props.reorderItem(data._id, -1)} wType="texted"
+                        style={props.currentList.items[0]==props.data ? {color: "black", pointerEvents:"none"} :  {color: "white", pointerEvents:"auto"}}>
                         <i className="material-icons">expand_less</i>
                     </WButton>
-                    <WButton className="table-entry-buttons" onClick={() => props.reorderItem(data._id, 1)} wType="texted">
+                    <WButton className="table-entry-buttons" onClick={() => props.reorderItem(data._id, 1)} wType="texted"
+                        style={props.currentList.items[props.currentList.items.length-1]==props.data ? {color: "black", pointerEvents:"none"} :  {color: "white", pointerEvents:"auto"}}>
                         <i className="material-icons">expand_more</i>
                     </WButton>
                     <WButton className="table-entry-buttons" onClick={() => props.deleteItem(data, props.index)} wType="texted">

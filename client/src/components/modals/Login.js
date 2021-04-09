@@ -37,7 +37,7 @@ const Login = (props) => {
 	return (
         // Replace div with WModal
 
-		<div className="login-modal">
+		/*<div className="login-modal">
 			<div className="modal-header" onClose={() => props.setShowLogin(false)}>
 				Login
 			</div>
@@ -65,6 +65,37 @@ const Login = (props) => {
 				</WButton>
 			</div>
 		</div>
+		*/
+		<WModal visible={true}>
+			<WMHeader onClose={() => props.setShowLogin(false)}>
+				Login
+			</WMHeader>
+
+			{
+				loading ? <div />
+					: <div className="main-login-modal">
+
+						<WInput className="modal-input" onBlur={updateInput} name='email' labelAnimation="up" barAnimation="solid" 
+							labelText="Email Address" wType="outlined" inputType='text' style={{height: "50px"}}/>
+						<div className="modal-spacer">&nbsp;</div>
+						<WInput className="modal-input" onBlur={updateInput} name='password' labelAnimation="up" barAnimation="solid" 
+							labelText="Password" wType="outlined" inputType='password' />
+
+						{
+							showErr ? <div className='modal-error'>
+								{errorMsg}
+							</div>
+								: <div className='modal-error'>&nbsp;</div>
+						}
+
+					</div>
+			}
+			<div>
+				<WButton className="modal-button" onClick={handleLogin} span clickAnimation="ripple-light" hoverAnimation="darken" shape="rounded" color="primary">
+					Login
+				</WButton>
+			</div>
+		</WModal>
 	);
 }
 
