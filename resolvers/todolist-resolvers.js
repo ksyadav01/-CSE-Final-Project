@@ -369,26 +369,6 @@ module.exports = {
 
 
 		}
-
-		/*moveListToTop: async(_,args) =>{
-			const {_id}=args;
-			const listId = new ObjectId(_id);
-			const lists = await Todolist.find()
-			let minId = lists[0].id
-			console.log(minId)
-			//lists.forEach(x=>minId=Math.min(minId, x.id))
-			// for(let i=1; i<lists.length; i++){
-			// 	if(lists[i].id<minId)
-			// 		minId=lists[i].id
-			// }
-			// console.log(minId)
-			// const updated = await Todolist.updateOne({_id: listId}, {id:(minId-1)});
-			// list = Todolist.findOne({id: minId});
-			if(updated)
-				return Todolist.findOne({id: minId});
-			return lists[0]
-		}
-		*/
 	}
 
 }
