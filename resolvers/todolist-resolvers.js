@@ -127,8 +127,7 @@ module.exports = {
 				if(value === 'incomplete') { value = false; }
 			}
 			listItems.map(item => {
-				if(item._id.toString() === itemId) {	
-					
+				if(item._id.toString() === itemId) {
 					item[field] = value;
 				}
 			});
@@ -312,8 +311,84 @@ module.exports = {
 			listItems = found.items;
 			return (found.items);
 
+		},
+		reorderItemsAssign: async (_, args) => {
+			const { _id} = args;
+			const listId = new ObjectId(_id);
+			let found = await Todolist.findOne({_id: listId});
+			let listItems = found.items;
+			let dupItems = []
+			for(let i=0; i< listItems.length; i++){
+				dupItems.push(listItems[i])
+			}
+			let isSorted=true
+			await listItems.sort((a,b) => a.assigned_to.localeCompare(b.assigned_to))
+			for(let i=0; i< listItems.length; i++){
+				if (listItems[i]!=dupItems[i]){
+					isSorted = false;
+					break;
+				}
+			}
+			if (isSorted==true){
+				listItems.sort((a,b) => b.assigned_to.localeCompare(a.assigned_to))
+			}
+			const updated = await Todolist.updateOne({_id: listId}, { items: listItems })
+			console.log("asd")
+			console.log(listItems)
+			if(updated) return (listItems);
+			// return old ordering if reorder was unsuccessful
+			listItems = found.items;
+			return (found.items);
+		},
+		moveListToTop: async(_,args) =>{
+			const {_id}=args;
+			const listId = new ObjectId(_id);
+			const lists = await Todolist.find()
+			let minId = lists[0].id
+			let i
+			let found = await Todolist.findOne({_id: listId});
+			for(i = 0; i < lists.length; i++){
+				if(lists[i]==found)
+					break
+			}
+			// IT DOESNT WORK AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
+			/*
+			console.log(i)
+			lists.splice(i, 1)
+			lists.unshift(found)
+			const updated = await Todolist.updateOne({_id: listId}, {id:(minId-1)});
+			//console.log(minId)
+			//lists.forEach(x=>minId=Math.min(minId, x.id))
+			//console.log(minId)
+			//const updated = await Todolist.updateOne({_id: listId}, {id:(minId-1)});
+			//list = Todolist.findOne({id: minId});
+			if(updated)
+				return list
+				*/
+			return lists[0]
+
+
 		}
 
+		/*moveListToTop: async(_,args) =>{
+			const {_id}=args;
+			const listId = new ObjectId(_id);
+			const lists = await Todolist.find()
+			let minId = lists[0].id
+			console.log(minId)
+			//lists.forEach(x=>minId=Math.min(minId, x.id))
+			// for(let i=1; i<lists.length; i++){
+			// 	if(lists[i].id<minId)
+			// 		minId=lists[i].id
+			// }
+			// console.log(minId)
+			// const updated = await Todolist.updateOne({_id: listId}, {id:(minId-1)});
+			// list = Todolist.findOne({id: minId});
+			if(updated)
+				return Todolist.findOne({id: minId});
+			return lists[0]
+		}
+		*/
 	}
 
 }

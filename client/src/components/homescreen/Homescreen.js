@@ -17,6 +17,7 @@ import { UpdateListField_Transaction,
 	ReorderItemsDescription_Transaction, 
 	ReorderItemsDate_Transaction, 
 	ReorderItemsStatus_Transaction, 
+	ReorderItemsAssign_Transaction, 
 	EditItem_Transaction,
 	clearAllTransactions } 				from '../../utils/jsTPS';
 import WInput from 'wt-frontend/build/components/winput/WInput';
@@ -30,11 +31,13 @@ const Homescreen = (props) => {
 	const [showLogin, toggleShowLogin] 		= useState(false);
 	const [showCreate, toggleShowCreate] 	= useState(false);
 
+	const [moveListToTop] = useMutation(mutations.LIST_TOP)
 	const [ReorderTodoItems] 		= useMutation(mutations.REORDER_ITEMS);
 	const [ReorderTodoItemsDescription] 		= useMutation(mutations.REORDER_ITEMS_DESC);
 	const [ReorderTodoItemsDescription1] 		= useMutation(mutations.REORDER_ITEMS_DESC1);
 	const [ReorderTodoItemsDate] 		= useMutation(mutations.REORDER_ITEMS_DATE);
 	const [ReorderTodoItemsStatus] 		= useMutation(mutations.REORDER_ITEMS_STATUS);
+	const [ReorderTodoItemsAssign] 		= useMutation(mutations.REORDER_ITEMS_ASSIGN);
 	const [UpdateTodoItemField] 	= useMutation(mutations.UPDATE_ITEM_FIELD);
 	const [UpdateTodolistField] 	= useMutation(mutations.UPDATE_TODOLIST_FIELD);
 	const [DeleteTodolist] 			= useMutation(mutations.DELETE_TODOLIST);
@@ -163,8 +166,18 @@ const Homescreen = (props) => {
 		tpsRedo();
 
 	};
+	const reorderItemAssign = async () => {
+		let listID = activeList._id;
+		let items = activeList.items;
+		let transaction = new ReorderItemsAssign_Transaction(listID, items, 
+			ReorderTodoItemsAssign, ReorderTodoItemsDescription1);
+		props.tps.addTransaction(transaction);
+		tpsRedo();
+	};
 
 	const createNewList = async () => {
+		
+		props.tps.clearAllTransactions();
 		const length = todolists.length
 		const id = length >= 1 ? todolists[length - 1].id + Math.floor((Math.random() * 100) + 1) : 1;
 		let list = {
@@ -185,9 +198,11 @@ const Homescreen = (props) => {
 	};
 
 	const deleteList = async (_id) => {
+		props.tps.clearAllTransactions();
 		DeleteTodolist({ variables: { _id: _id }, refetchQueries: [{ query: GET_DB_TODOS }] });
 		refetch();
 		setActiveList({});
+
 	};
 
 	const updateListField = async (_id, field, value, prev) => {
@@ -197,8 +212,12 @@ const Homescreen = (props) => {
 
 	};
 
-	const handleSetActive = (id) => {
+	const handleSetActive = async (id, _id) => {
+		const {data}= await moveListToTop({ variables:{_id: _id}});
+		refetch();
 		const todo = todolists.find(todo => todo.id === id || todo._id === id);
+		refetch();
+
 		setActiveList(todo);
 	};
 
@@ -221,14 +240,23 @@ const Homescreen = (props) => {
 	};
 
 	const setShowDelete = () => {
-		props.tps.clearAllTransactions();
+		//props.tps.clearAllTransactions();
 		toggleShowCreate(false);
 		toggleShowLogin(false);
 		toggleShowDelete(!showDelete)
 	}
-
+	const handleUndoRedoKey = (e) => {
+	  if(e.keyCode==90 && e.ctrlKey){
+		tpsUndo();
+	  }
+	  if(e.keyCode==89 && e.ctrlKey){
+		tpsRedo();
+	  }
+	}
 	return (
-		<WLayout wLayout="header-lside">
+		<WLayout wLayout="header-lside"
+		onKeyDown={handleUndoRedoKey}
+		tabIndex={0}>
 			<WLHeader>
 				<WNavbar color="colored">
 					<ul>
@@ -271,13 +299,19 @@ const Homescreen = (props) => {
 									reorderDescription={reorderItemDescription}
 									reorderDate={reorderItemDate}
 									reorderStatus={reorderItemStatus}
+									reorderAssign={reorderItemAssign}
 									setShowDelete={setShowDelete}
 									activeList={activeList} setActiveList={setActiveList}
 									closeList={props.tps.clearAllTransactions}
+									tps={props.tps}
+									undo={tpsUndo} redo={tpsRedo}
 								/>
 							</div>
 						:
-							<div className="container-secondary" />
+							<div className="container-secondary" >
+							
+								
+							</div>
 				}
 
 			</WLMain>

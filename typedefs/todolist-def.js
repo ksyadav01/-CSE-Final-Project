@@ -33,6 +33,8 @@ const typeDefs = gql `
 		reorderItemsDescription1( _id: String!, originalItems: [ItemInput]!):[Item]
 		reorderItemsDate( _id: String!):[Item]
 		reorderItemsStatus( _id: String!):[Item]
+		reorderItemsAssign( _id: String!):[Item]
+		moveListToTop(_id: String!): Todolist
 	}
 	input FieldInput {
 		_id: String

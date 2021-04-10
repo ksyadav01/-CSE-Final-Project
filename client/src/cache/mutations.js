@@ -121,6 +121,28 @@ export const REORDER_ITEMS_STATUS= gql`
 		}
 	}
 `;
+export const REORDER_ITEMS_ASSIGN = gql`
+	mutation ReorderItemsAssign($_id: String!) {
+		reorderItemsAssign(_id: $_id) {
+			_id
+			id
+			description
+			due_date
+			assigned_to
+			completed
+		}
+	}
+`;
+export const LIST_TOP = gql`
+	mutation MoveListToTop($_id: String!) {
+		moveListToTop(_id: $_id){
+			_id
+			id
+			name
+			owner
+		} 
+	}
+`;
 
 export const ADD_TODOLIST = gql`
 	mutation AddTodolist($todolist: TodoInput!) {

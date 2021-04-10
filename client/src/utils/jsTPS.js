@@ -135,6 +135,35 @@ export class ReorderItemsStatus_Transaction extends jsTPS_Transaction {
 		return data;
     }
 }
+export class ReorderItemsAssign_Transaction extends jsTPS_Transaction {   
+    constructor(listID, items, callback1, callback2) {
+        super();
+        this.listID = listID;
+        this.items = items
+		this.updateFunction1 = callback1;
+		this.updateFunction2 = callback2;
+	}
+    async doTransaction() {
+		const { data } = await this.updateFunction1({ variables: {_id: this.listID}});
+		return data;
+    }
+    async undoTransaction() {
+        let newList = []
+        for (let i=0; i<this.items.length; i++){
+            let newItem = {
+                _id: this.items[i]._id,
+                id: this.items[i].id,
+                description: this.items[i].description,
+                due_date: this.items[i].due_date,
+                assigned_to: this.items[i].assigned_to,
+                completed: this.items[i].completed
+            }
+            newList.push(newItem);
+        }
+		const {data} = await this.updateFunction2({ variables: {_id: this.listID, originalItems: newList}});
+		return data;
+    }
+}
 
 export class EditItem_Transaction extends jsTPS_Transaction {
 	constructor(listID, itemID, field, prev, update, flag, callback) {
