@@ -21,7 +21,8 @@ import { UpdateListField_Transaction,
 	EditItem_Transaction,
 	clearAllTransactions } 				from '../../utils/jsTPS';
 import WInput from 'wt-frontend/build/components/winput/WInput';
-
+import WMMain from 'wt-frontend/build/components/wmodal/WMMain';
+import Home_Image from "./home_image.jpg"
 
 const Homescreen = (props) => {
 
@@ -254,7 +255,7 @@ const Homescreen = (props) => {
 	  }
 	}
 	return (
-		<WLayout wLayout="header-lside"
+		<WLayout wLayout="header"
 		onKeyDown={handleUndoRedoKey}
 		tabIndex={0}>
 			<WLHeader>
@@ -266,15 +267,19 @@ const Homescreen = (props) => {
 					</ul>
 					<ul>
 						<NavbarOptions
-							fetchUser={props.fetchUser} auth={auth} 
+							fetchUser={props.fetchUser} auth={auth}
 							setShowCreate={setShowCreate} setShowLogin={setShowLogin}
 							refetchTodos={refetch} setActiveList={setActiveList}
 						/>
 					</ul>
 				</WNavbar>
 			</WLHeader>
-
-			<WLSide side="left">
+			<WMMain style={{textAlign: 'center', color: "white", fontSize: "30px"}}>
+				<br></br><br></br><br></br>
+				<img src={Home_Image}></img>
+				<h1>Welcome to the <br></br>World Data Mapper</h1>
+			</WMMain>
+			{/* <WLSide side="left">
 				<WSidebar>
 					{
 						activeList ?
@@ -314,18 +319,19 @@ const Homescreen = (props) => {
 							</div>
 				}
 
-			</WLMain>
+			</WLMain> */}
 
 			{
 				showDelete && (<Delete deleteList={deleteList} activeid={activeList._id} setShowDelete={setShowDelete} />)
 			}
 
 			{
-				showCreate && (<CreateAccount fetchUser={props.fetchUser} setShowCreate={setShowCreate} />)
+				//showCreate && (<CreateAccount fetchUser={props.fetchUser} setShowCreate={setShowCreate} />)
+				//showCreate && (<div onclick={()=>{history.push'/create_account}}> </div>)
 			}
 
 			{
-				showLogin && (<Login fetchUser={props.fetchUser} refetchTodos={refetch}setShowLogin={setShowLogin} />)
+				//showLogin && (<Login fetchUser={props.fetchUser} refetchTodos={refetch}setShowLogin={setShowLogin} />)
 			}
 
 		</WLayout>
