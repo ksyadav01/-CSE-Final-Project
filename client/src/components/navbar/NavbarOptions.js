@@ -7,6 +7,7 @@ import { useHistory } from 'react-router-dom';
 const LoggedIn = (props) => {
     const client = useApolloClient();
 	const [Logout] = useMutation(LOGOUT);
+    let history = useHistory();
 
     const handleLogout = async (e) => {
         Logout();
@@ -15,6 +16,7 @@ const LoggedIn = (props) => {
             let reset = await client.resetStore();
             if (reset) props.setActiveList({});
         }
+        history.push("/home")
     };
 
     return (

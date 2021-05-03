@@ -31,7 +31,10 @@ const regionSchema = new Schema(
             type: Array,
             required: true
         },
-        subregions: [this]
+        subregions: {
+            type: Array,
+            requried: true
+        }
         
     }
 );

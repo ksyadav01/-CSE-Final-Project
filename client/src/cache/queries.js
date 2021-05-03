@@ -28,3 +28,22 @@ export const GET_DB_TODOS = gql`
 		}
 	}
 `;
+
+export const GET_DB_MAPS = gql`
+	query GetDBMaps {
+		getAllMaps {
+			_id
+			id
+			regionList {
+				_id
+				id
+				name
+				capital
+				leader
+				flag
+				landmarks
+				subregion
+			}
+		}
+	}
+`;

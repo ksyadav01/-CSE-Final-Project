@@ -2,7 +2,7 @@ import React 			from 'react';
 import Homescreen 		from './components/homescreen/Homescreen';
 import CreateAccountScreen 		from './components/CreateAccountScreen/CreateAccountScreen';
 import LoginScreen 		from './components/LoginScreen/LoginScreen';
-import Maps 		from './components/maps/maps';
+import Maps 		from './components/maps/Maps';
 import { useQuery } 	from '@apollo/client';
 import * as queries 	from './cache/queries';
 import { jsTPS } 		from './utils/jsTPS';

@@ -11,6 +11,10 @@ const mapSchema = new Schema(
 			type: Number,
 			required: true
 		},
+		owner: {
+			type: String,
+			required: true
+		},
 		regionList: [Region]
 	},
 	{ timestamps: true }
