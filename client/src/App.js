@@ -2,6 +2,7 @@ import React 			from 'react';
 import Homescreen 		from './components/homescreen/Homescreen';
 import CreateAccountScreen 		from './components/CreateAccountScreen/CreateAccountScreen';
 import LoginScreen 		from './components/LoginScreen/LoginScreen';
+import UpdateAccount 		from './components/UpdateAccountScreen/UpdateAccountScreen';
 import Maps 		from './components/maps/Maps';
 import { useQuery } 	from '@apollo/client';
 import * as queries 	from './cache/queries';
@@ -41,6 +42,13 @@ const App = () => {
 					name="create_account" 
 					render={() => 
 						<CreateAccountScreen fetchUser={refetch} user={user} />
+					} 
+				/>
+				<Route 
+					path="/update_account" 
+					name="update_account" 
+					render={() => 
+						<UpdateAccount fetchUser={refetch} user={user} />
 					} 
 				/>
 				<Route 

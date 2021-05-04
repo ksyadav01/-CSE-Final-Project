@@ -36,6 +36,7 @@ const Maps = (props) => {
                 maps.push(places)
             }
 		}
+        history.push("/maps")
     }
 
     const createNewMap = async () =>{

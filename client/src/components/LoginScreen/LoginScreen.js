@@ -55,10 +55,12 @@ const Login = (props) => {
 					: <div className="main-login-modal">
 
 						<WInput className="modal-input" onBlur={updateInput} name='email' labelAnimation="up" barAnimation="solid" 
-							labelText="Email Address" wType="outlined" inputType='text' style={{height: "50px"}}/>
+							labelText="Email Address" wType="outlined" inputType='text' 
+							style={{height: "50px", backgroundColor: "white", color: "black"}} />
 						<div className="modal-spacer">&nbsp;</div>
 						<WInput className="modal-input" onBlur={updateInput} name='password' labelAnimation="up" barAnimation="solid" 
-							labelText="Password" wType="outlined" inputType='password' />
+							labelText="Password" wType="outlined" inputType='password' 
+							style={{backgroundColor: "white", color: "black"}}  />
 
 						{
 							showErr ? <div className='modal-error'>

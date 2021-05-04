@@ -16,7 +16,6 @@ module.exports = {
 			if(!_id) { return([])};
 			console.log(_id)
 			const map = await Map.find({owner: _id});
-			console.log("kens a whore")
 			console.log(map)
 			if(map) return (map);
 		},
@@ -97,7 +96,6 @@ module.exports = {
 							 array on failure
 		**/
 		deleteItem: async (_, args) => {
-			console.log("dfssimone sucksnklsdakjnsd")
 			const  { _id, itemId } = args;
 			const listId = new ObjectId(_id);
 			const found = await Todolist.findOne({_id: listId});

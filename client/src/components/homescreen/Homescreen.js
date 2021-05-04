@@ -267,7 +267,7 @@ const Homescreen = (props) => {
 					</ul>
 					<ul>
 						<NavbarOptions
-							fetchUser={props.fetchUser} auth={auth}
+							fetchUser={props.fetchUser} auth={auth} user={props.user}
 							setShowCreate={setShowCreate} setShowLogin={setShowLogin}
 							refetchTodos={refetch} setActiveList={setActiveList}
 						/>
