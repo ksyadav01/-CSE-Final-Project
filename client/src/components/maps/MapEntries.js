@@ -18,7 +18,7 @@ const MapEntries = (props) => {
 
 
     return (
-        <WMMain>
+        <WMMain style={{width:"600px", fontSize: "20px"}}>
             {props.data.name}
         </WMMain>
     );

@@ -3,9 +3,12 @@ import MapEntries   from './MapEntries';
 
 const MapContents = (props) => {
 
-    const entries = props.activeMap ? props.activeMap.regionList : null;
+    const entries = props.activeMap ? props.activeMap : null;
+    console.log(props.activeMap)
+    console.log("dlkasklsadklnshdnlkhsdlknsnkjlsdknj")
+    //const entries = props.activeMap ? props.activeMap : null;
     return (
-        entries ? <div className=' table-entries container-primary'>
+        entries ? <div>
             {
                 entries.map((entry, index) => (
                     <MapEntries

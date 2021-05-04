@@ -34,6 +34,8 @@ export const GET_DB_MAPS = gql`
 		getAllMaps {
 			_id
 			id
+			name
+			owner
 			regionList {
 				_id
 				id

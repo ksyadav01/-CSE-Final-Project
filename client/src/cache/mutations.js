@@ -44,7 +44,21 @@ export const DELETE_ITEM = gql`
 		}
 	}
 `;
-
+// export const CREATE_NEW_MAP = gql`
+// 	mutation CreateNewMap($map : MapInput!){
+// 		createNewMap(map: $map){
+// 			_id
+// 			id
+// 			owner
+// 			regionList
+// 		}
+// 	}
+// 	`;
+export const CREATE_NEW_MAP = gql`
+	mutation CreateNewMap($map : MapInput!){
+		createNewMap(map: $map)
+	}
+	`;
 export const UPDATE_ITEM_FIELD = gql`
 	mutation UpdateItemField($_id: String!, $itemId: String!, $field: String!, $value: String!, $flag: Int!) {
 		updateItemField(_id: $_id, itemId: $itemId, field: $field, value: $value, flag: $flag) {

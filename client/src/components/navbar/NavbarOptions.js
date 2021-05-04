@@ -11,10 +11,10 @@ const LoggedIn = (props) => {
 
     const handleLogout = async (e) => {
         Logout();
+        history.push("/home")
         const { data } = await props.fetchUser();
         if (data) {
             let reset = await client.resetStore();
-            if (reset) props.setActiveList({});
         }
         history.push("/home")
     };

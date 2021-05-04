@@ -37,6 +37,24 @@ module.exports = {
 		 	@param 	 {object} args - a todolist id and an empty item object
 			@returns {string} the objectID of the item or an error message
 		**/
+		createNewMap: async(_,args)=>{
+			const { map } = args
+			const objectId = new ObjectId();
+			const { _id, id, name, owner, regionList } = map
+			const newMap = new Map({
+				_id: objectId,
+				id: id,
+				name: name,
+				owner: owner,
+				regionList: regionList
+			});
+			const updated = await newMap.save();
+			console.log(":sdsa")
+			if(updated){
+				return objectId;
+			}
+			return ("can't add it");
+		},
 		addItem: async(_, args) => {
 			const { _id, item , index } = args;
 			const listId = new ObjectId(_id);

@@ -5,6 +5,7 @@ const typeDefs = gql `
 	type Map {
 		_id: String!
 		id: Int!
+        name: String!
 		owner: String!
 		regionList: [Region]
 	}
@@ -19,9 +20,10 @@ const typeDefs = gql `
         subregion: [Int]
     }
 	extend type Query {
-		getAllMaps: Map
+		getAllMaps: [Map]
 	}
 	extend type Mutation {
+        createNewMap(map: MapInput!): String
 		addRegionToMap(_id: String!, regionList: [RegionInput]!): [Region]
 		deleteRegionFromMap(_id: String!, regionList: [RegionInput]!): [Region]
 	}
@@ -35,6 +37,13 @@ const typeDefs = gql `
         landmarks: [String]
         subregion: [Int]
     }
+    input MapInput {
+		_id: String!
+		id: Int!
+        name: String!
+		owner: String!
+		regionList: [RegionInput]
+	}
 `;
 
 module.exports = { typeDefs: typeDefs }
