@@ -10,13 +10,15 @@ const typeDefs = gql `
         capital: String!
         flag: String!
         landmarks: [String]
-        subregion: [Int]
+        subregions: [String]
     }
     extend type Query {
         getAllRegions: [Region]
+		getRegionById(_id: String!): Region 
     }
     extend type Mutation {
         addRegion(region: RegionInput!, _id: String!, index: Int!): String
+        createNewRegion(region: RegionInput!, parentId: String!): String
         deleteRegion(regionId: String!, _id: String!): [Region]
         updateRegionField(regionId: String!, _id: String!, field: String!, value: String!, flag: Int!): [Region]
         reorderRegionName(_id: String!):[ Region]
@@ -33,7 +35,7 @@ const typeDefs = gql `
         capital: String
         flag: String
         landmarks: [String]
-        subregion: [Int]
+        subregions: [String]
     }
 `;
 

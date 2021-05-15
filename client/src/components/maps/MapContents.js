@@ -17,6 +17,8 @@ const MapContents = (props) => {
                         index={index}
                         //editItem={props.editItem}
                         currentList={props.activeMap}
+                        deleteMap={props.deleteMap}
+                        updateMapName={props.updateMapName}
                     />
                 ))
             }

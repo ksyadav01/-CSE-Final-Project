@@ -8,6 +8,7 @@ import WInput from 'wt-frontend/build/components/winput/WInput';
 import { GET_DB_MAPS } 				from '../../cache/queries';
 import * as mutations 					from '../../cache/mutations';
 import { useMutation, useQuery } 		from '@apollo/client';
+import NewMap 							from '../modals/NewMap';
 import MapContents   from './MapContents';
 import Globe from "./globe.jpg"
 import WButton from 'wt-frontend/build/components/wbutton/WButton';
@@ -15,12 +16,16 @@ import WButton from 'wt-frontend/build/components/wbutton/WButton';
 const Maps = (props) => {
     const history = useHistory();
 	const [activeMap, setActiveMap] 		= useState({});
+	const [showCreateMap, toggleCreateMap] 	= useState(false);
 	const [CreateNewMap] 		= useMutation(mutations.CREATE_NEW_MAP);
+	const [DeleteMap] 		= useMutation(mutations.DELETE_MAP);
+	const [UpdateNameMap] 	= useMutation(mutations.UPDATE_MAP_NAME);
     let maps = []
     const { loading, error, data, refetch } = useQuery(GET_DB_MAPS);
 	if(loading) { console.log(loading, 'loading'); }
 	if(error) { console.log(error, 'error'); }
 	if(data) { 
+        console.log(data)
         for(let places of data.getAllMaps){
             maps.push(places)
             console.log("kjbdsfjhbadsfkjhblgdfjkhbdfasjhb")
@@ -39,14 +44,14 @@ const Maps = (props) => {
         history.push("/maps")
     }
 
-    const createNewMap = async () =>{
+    const createNewMap = async (name) =>{
         console.log("peasd")
         let maps = {
             _id: "",
-            id: 1123,
-            name: "New Map",
+            id: 1123,   
+            name: name,
             owner: props.user._id,
-            regionList: []
+            subregions: []
         }
         const { data } = await CreateNewMap({variables: {map: maps}, refetchQueries: {query: GET_DB_MAPS}});
         
@@ -60,6 +65,23 @@ const Maps = (props) => {
         history.push("/maps")
     }
 	
+	const deleteMap = async (_id) => {
+		//props.tps.clearAllTransactions();
+		DeleteMap({ variables: { _id: _id }, refetchQueries: [{ query: GET_DB_MAPS }] });
+		refetchMaps(refetch);
+        console.log("test")
+		//setActiveList({});
+
+	};
+    const setShowCreateMap = () => {
+		toggleCreateMap(!showCreateMap);
+	};
+	const updateMapName = async (_id, value) => {
+		UpdateNameMap({variables: { _id: _id, value: value }});
+		refetchMaps(refetch);
+
+	};
+
     console.log(activeMap)
     return (
         <WLayout>
@@ -89,20 +111,23 @@ const Maps = (props) => {
 				                <img style={{width: "400px"}} src={Globe}></img>
                                 <div style={{border: "5px solid black", backgroundColor: "#f87f0f", width: "405px", height: "95px",
                                     marginTop: "-7px", textAlign: "center", display: "flex", justifyContent: "center", 
-                                    alignItems: "center", fontSize: "50px"}} onClick={createNewMap} >
+                                    alignItems: "center", fontSize: "50px"}} onClick={setShowCreateMap} >
                                         Create New Map
                                     </div>
                             </div>
                             
                             
                         </div>
-                        <MapContents activeMap={maps} style={{border: "10px solid red", width: '600px', height: 'auto', zIndex: '1'}}>
+                        <MapContents activeMap={maps} deleteMap={deleteMap} updateMapName={updateMapName}
+                        style={{border: "10px solid red", width: '600px', height: 'auto', zIndex: '1'}}>
                         </MapContents>
                     </div>
                     
                 </div>
             </WMMain>
-        
+            {
+				showCreateMap && (<NewMap fetchUser={props.fetchUser} createNewMap={createNewMap} setShowCreateMap={setShowCreateMap} />)
+			}
         </WLayout>
         // <div >
         //     <TableHeader

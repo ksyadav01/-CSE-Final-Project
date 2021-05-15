@@ -4,10 +4,11 @@ import CreateAccountScreen 		from './components/CreateAccountScreen/CreateAccoun
 import LoginScreen 		from './components/LoginScreen/LoginScreen';
 import UpdateAccount 		from './components/UpdateAccountScreen/UpdateAccountScreen';
 import Maps 		from './components/maps/Maps';
+import Regions 		from './components/regions/Regions';
 import { useQuery } 	from '@apollo/client';
 import * as queries 	from './cache/queries';
 import { jsTPS } 		from './utils/jsTPS';
-import { BrowserRouter, Switch, Route, Redirect, useHistory } from 'react-router-dom';
+import { HashRouter, BrowserRouter, Switch, Route, Redirect, useHistory } from 'react-router-dom';
  
 const App = () => {
 	let user = null;
@@ -64,6 +65,15 @@ const App = () => {
 					render={() => 
 						<Maps fetchUser={refetch} user={user} />
 					} 
+				/>
+
+				<Route 
+					path="/regions/:id" 
+					name="regions" 
+					//component={Regions}
+				 	render={() => 
+				 		<Regions fetchUser={refetch} user={user} />
+				 	} 
 				/>
 				<Route/>
 			</Switch>

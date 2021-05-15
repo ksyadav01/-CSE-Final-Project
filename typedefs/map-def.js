@@ -7,7 +7,7 @@ const typeDefs = gql `
 		id: Int!
         name: String!
 		owner: String!
-		regionList: [Region]
+		subregions: [String]
 	}
     type Region {
         _id: String!
@@ -17,15 +17,21 @@ const typeDefs = gql `
         capital: String!
         flag: String!
         landmarks: [String]
-        subregion: [Int]
+        subregions: [String]
     }
 	extend type Query {
 		getAllMaps: [Map]
+        getAllRegions: [Region]
+		getRegionById(_id: String!): Region 
 	}
 	extend type Mutation {
         createNewMap(map: MapInput!): String
-		addRegionToMap(_id: String!, regionList: [RegionInput]!): [Region]
-		deleteRegionFromMap(_id: String!, regionList: [RegionInput]!): [Region]
+        createNewRegion(region: RegionInput!, parentId: String!): String
+		addRegionToMap(_id: String!, subregions: [RegionInput]!): [Region]	
+        deleteRegion(regionId: String!, _id: String!): [Region]
+		deleteMap(_id: String!): Boolean
+		updateMapName(_id: String!, value: String!): String
+		deleteRegionFromMap(_id: String!, subregions: [RegionInput]!): [Region]
 	}
     input RegionInput {
         _id: String
@@ -35,14 +41,14 @@ const typeDefs = gql `
         capital: String
         flag: String
         landmarks: [String]
-        subregion: [Int]
+        subregions: [String]
     }
     input MapInput {
 		_id: String!
 		id: Int!
         name: String!
 		owner: String!
-		regionList: [RegionInput]
+		subregions: [String]
 	}
 `;
 
