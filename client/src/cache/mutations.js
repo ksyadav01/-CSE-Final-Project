@@ -80,13 +80,13 @@ export const DELETE_MAP = gql`
 	}
 `;
 export const DELETE_REGION = gql`
-	mutation DeleteRegion($_id: String!) {
-		deleteRegion(_id: $_id)
+	mutation DeleteRegion($_id: String!, $parentId: String!) {
+		deleteRegion(_id: $_id, parentId: $parentId)
 	}
 `;
-export const UPDATE_MAP_NAME = gql`
-	mutation UpdateMapName($_id: String!, $value: String!) {
-		updateMapName(_id: $_id, value: $value)
+export const UPDATE_REGION_NAME = gql`
+	mutation UpdateRegionName($_id: String!, $value: String!) {
+		updateRegionName(_id: $_id, value: $value)
 	}
 `;
 export const UPDATE_ITEM_FIELD = gql`
@@ -99,6 +99,12 @@ export const UPDATE_ITEM_FIELD = gql`
 			assigned_to
 			completed
 		}
+	}
+`;
+export const UPDATE_REGION_FIELD = gql`
+	mutation UpdateRegionField( $itemId: String!, $field: String!, $value: String!) {
+		updateRegionField(itemId: $itemId, field: $field, value: $value) 
+		
 	}
 `;
 
@@ -114,52 +120,24 @@ export const REORDER_ITEMS = gql`
 		}
 	}
 `;
-export const REORDER_ITEMS_DESC = gql`
-	mutation ReorderItemsDescription($_id: String!) {
-		reorderItemsDescription(_id: $_id) {
-			_id
-			id
-			description
-			due_date
-			assigned_to
-			completed
-		}
+export const REORDER_REGION_NAME = gql`
+	mutation ReorderRegionName($_id: String!) {
+		reorderRegionName(_id: $_id)
 	}
 `;
-export const REORDER_ITEMS_DESC1 = gql`
-	mutation ReorderItemsDescription1($_id: String!, $originalItems: [ItemInput]!) {
-		reorderItemsDescription1(_id: $_id, originalItems: $originalItems) {
-			_id
-			id
-			description
-			due_date
-			assigned_to
-			completed
-		}
+export const REORDER_REGION_FLIPPER = gql`
+	mutation ReorderRegionFlipper($_id: String!, $prevRegions: [String]!) {
+		reorderRegionFlipper(_id: $_id, prevRegions: $prevRegions)
 	}
 `;
-export const REORDER_ITEMS_DATE = gql`
-	mutation ReorderItemsDate($_id: String!) {
-		reorderItemsDate(_id: $_id) {
-			_id
-			id
-			description
-			due_date
-			assigned_to
-			completed
-		}
+export const REORDER_REGION_CAPITAL = gql`
+	mutation ReorderRegionCapital($_id: String!) {
+		reorderRegionCapital(_id: $_id)
 	}
 `;
-export const REORDER_ITEMS_STATUS= gql`
-	mutation ReorderItemsStatus($_id: String!) {
-		reorderItemsStatus(_id: $_id) {
-			_id
-			id
-			description
-			due_date
-			assigned_to
-			completed
-		}
+export const REORDER_REGION_LEADER= gql`
+	mutation ReorderRegionLeader($_id: String!) {
+		reorderItemsLeader(_id: $_id)
 	}
 `;
 export const REORDER_ITEMS_ASSIGN = gql`

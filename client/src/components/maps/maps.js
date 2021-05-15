@@ -6,6 +6,7 @@ import { WLayout, WLHeader, WLMain, WLSide, WNavbar, WNavItem  } from 'wt-fronte
 import { useHistory } from 'react-router-dom';
 import WInput from 'wt-frontend/build/components/winput/WInput';
 import { GET_DB_MAPS } 				from '../../cache/queries';
+import { GET_DB_REGION } 				from '../../cache/queries';
 import * as mutations 					from '../../cache/mutations';
 import { useMutation, useQuery } 		from '@apollo/client';
 import NewMap 							from '../modals/NewMap';
@@ -15,30 +16,33 @@ import WButton from 'wt-frontend/build/components/wbutton/WButton';
 
 const Maps = (props) => {
     const history = useHistory();
-	const [activeMap, setActiveMap] 		= useState({});
 	const [showCreateMap, toggleCreateMap] 	= useState(false);
-	const [CreateNewMap] 		= useMutation(mutations.CREATE_NEW_MAP);
+	const [CreateNewRegion] 		= useMutation(mutations.CREATE_NEW_REGION);
 	const [DeleteMap] 		= useMutation(mutations.DELETE_MAP);
-	const [UpdateNameMap] 	= useMutation(mutations.UPDATE_MAP_NAME);
+	const [UpdateNameMap] 	= useMutation(mutations.UPDATE_REGION_NAME);
     let maps = []
-    const { loading, error, data, refetch } = useQuery(GET_DB_MAPS);
+    let regions = []
+    const { loading, error, data, refetch } = useQuery(GET_DB_REGION);
 	if(loading) { console.log(loading, 'loading'); }
 	if(error) { console.log(error, 'error'); }
 	if(data) { 
-        console.log(data)
-        for(let places of data.getAllMaps){
-            maps.push(places)
-            console.log("kjbdsfjhbadsfkjhblgdfjkhbdfasjhb")
+        for(let places of data.getAllRegions){
+            if(places.types=="map"){
+                maps.push(places)
+            }
+            regions.push(places)
         }
     }
 
 	const auth = props.user === null ? false : true;
-    const refetchMaps = async (refetch) => {
-        console.log("saddaskjbfbdfjbsdfbjkhdsfajbk")
+    const refetchRegions = async (refetch) => {
 		const { loading, error, data } = await refetch();
 		if (data) {
-            for(let places of data.getAllMaps){
-                maps.push(places)
+            for(let places of data.getAllRegions){
+                if(places.types=="map"){
+                    maps.push(places)
+                }
+                regions.push(places)
             }
 		}
         history.push("/maps")
@@ -46,30 +50,33 @@ const Maps = (props) => {
 
     const createNewMap = async (name) =>{
         console.log("peasd")
-        let maps = {
+        let regions = {
             _id: "",
             id: 1123,   
             name: name,
+            capital: "Enter Capital",
+            types: 'map',
+            leader: "Enter Leader",
             owner: props.user._id,
+            flag: "Insert Flag Here",
+            landmarks: [],
             subregions: []
         }
-        const { data } = await CreateNewMap({variables: {map: maps}, refetchQueries: {query: GET_DB_MAPS}});
-        
-        console.log("pd")
-        await refetchMaps(refetch)
-        console.log("peasdsadasd")
-        if(data) {
-            setActiveMap(data.CREATE_NEW_MAP);
-        }
+        const { data } = await CreateNewRegion({variables: {region: regions, parentId: "kekw"}, refetchQueries: {query: GET_DB_REGION}});
+        await refetchRegions(refetch)
+        // if(data) {
+        //     setActiveMap(data.CREATE_NEW_MAP);
+        // }
         
         history.push("/maps")
     }
 	
 	const deleteMap = async (_id) => {
 		//props.tps.clearAllTransactions();
-		DeleteMap({ variables: { _id: _id }, refetchQueries: [{ query: GET_DB_MAPS }] });
-		refetchMaps(refetch);
-        console.log("test")
+        console.log('Attempt to delete')
+		DeleteMap({ variables: { _id: _id }, refetchQueries: [{ query: GET_DB_REGION }] });
+        console.log("Deleted")
+		refetchRegions(refetch)
 		//setActiveList({});
 
 	};
@@ -78,11 +85,9 @@ const Maps = (props) => {
 	};
 	const updateMapName = async (_id, value) => {
 		UpdateNameMap({variables: { _id: _id, value: value }});
-		refetchMaps(refetch);
+		refetchRegions(refetch)
 
 	};
-
-    console.log(activeMap)
     return (
         <WLayout>
             <WLHeader>
@@ -118,7 +123,7 @@ const Maps = (props) => {
                             
                             
                         </div>
-                        <MapContents activeMap={maps} deleteMap={deleteMap} updateMapName={updateMapName}
+                        <MapContents maps={maps} deleteMap={deleteMap} updateMapName={updateMapName}
                         style={{border: "10px solid red", width: '600px', height: 'auto', zIndex: '1'}}>
                         </MapContents>
                     </div>
@@ -129,24 +134,6 @@ const Maps = (props) => {
 				showCreateMap && (<NewMap fetchUser={props.fetchUser} createNewMap={createNewMap} setShowCreateMap={setShowCreateMap} />)
 			}
         </WLayout>
-        // <div >
-        //     <TableHeader
-        //         disabled={!props.activeList._id} addItem={props.addItem}
-        //         setShowDelete={props.setShowDelete} setActiveList={props.setActiveList}
-        //         reorderDescription={props.reorderDescription}
-        //         reorderDate = {props.reorderDate}
-        //         reorderStatus={props.reorderStatus}
-        //         reorderAssign={props.reorderAssign}
-        //         closeList={props.closeList}
-        //         undo={props.undo} redo={props.redo} 
-        //         tps={props.tps}
-        //         ></TableHeader>
-        //     <TableContents
-        //         key={props.activeList._id} activeList={props.activeList}
-        //         deleteItem={props.deleteItem} reorderItem={props.reorderItem}
-        //         editItem={props.editItem}
-        //     />
-        // </div>
     );
 };
 

@@ -72,7 +72,7 @@ const App = () => {
 					name="regions" 
 					//component={Regions}
 				 	render={() => 
-				 		<Regions fetchUser={refetch} user={user} />
+				 		<Regions tps={transactionStack} fetchUser={refetch} user={user} />
 				 	} 
 				/>
 				<Route/>

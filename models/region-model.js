@@ -15,6 +15,14 @@ const regionSchema = new Schema(
             type: String,
             required: true
         },
+		owner: {
+			type: String,
+			required: true
+		},
+        types: {
+			type: String,
+			required: true
+        },
         capital: {
             type: String,
             required: true

@@ -47,6 +47,8 @@ export const GET_DB_REGION = gql`
 			id
 			name
 			capital
+			owner
+			types
 			leader
 			flag
 			landmarks
@@ -61,6 +63,8 @@ export const GET_DB_REGION_ID = gql`
 			id
 			name
 			capital
+			owner
+			types
 			leader
 			flag
 			landmarks

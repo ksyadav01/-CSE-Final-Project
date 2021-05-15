@@ -47,99 +47,98 @@ export class ReorderItems_Transaction extends jsTPS_Transaction {
     
 }
 
-export class ReorderItemsDescription_Transaction extends jsTPS_Transaction {   
-    constructor(listID, items, callback1, callback2) {
+export class ReorderRegionName_Transaction extends jsTPS_Transaction {   
+    constructor(regionId,theSubregions, callback1, callback2) {
         super();
-        this.listID = listID;
-        this.items = items
+        this.regionId = regionId;
+        this.theSubregions = theSubregions
 		this.updateFunction1 = callback1;
 		this.updateFunction2 = callback2;
 	}
     async doTransaction() {
         console.log("sdadssdsad")
-		const { data } = await this.updateFunction1({ variables: {_id: this.listID}});
+		const { data } = await this.updateFunction1({ variables: {_id: this.regionId}});
 		return data;
     }
     async undoTransaction() {
         let newList = []
-        for (let i=0; i<this.items.length; i++){
-            let newItem = {
-                _id: this.items[i]._id,
-                id: this.items[i].id,
-                description: this.items[i].description,
-                due_date: this.items[i].due_date,
-                assigned_to: this.items[i].assigned_to,
-                completed: this.items[i].completed
-            }
-            newList.push(newItem);
-        }
-		const {data} = await this.updateFunction2({ variables: {_id: this.listID, originalItems: newList}});
+        // for (let i=0; i<this.items.length; i++){
+        //     let newRegion = {
+        //         _id: this.items[i]._id,
+        //         id: this.items[i].id,
+        //         description: this.items[i].description,
+        //         due_date: this.items[i].due_date,
+        //         assigned_to: this.items[i].assigned_to,
+        //         completed: this.items[i].completed
+        //     }
+        //     newList.push(newRegion);
+        // }
+		const {data} = await this.updateFunction2({ variables: {_id: this.regionId, prevRegions: this.theSubregions}});
 		return data;
     }
 }
-export class ReorderItemsDate_Transaction extends jsTPS_Transaction {   
-    constructor(listID, items, callback1, callback2) {
+export class ReorderRegionCapital_Transaction extends jsTPS_Transaction {  
+    constructor(regionId,theSubregions, callback1, callback2) {
         super();
-        this.listID = listID;
-        this.items = items
+        this.regionId = regionId;
+        this.theSubregions = theSubregions
 		this.updateFunction1 = callback1;
 		this.updateFunction2 = callback2;
 	}
     async doTransaction() {
-		const { data } = await this.updateFunction1({ variables: {_id: this.listID}});
+		const { data } = await this.updateFunction1({ variables: {_id: this.regionId}});
 		return data;
     }
     async undoTransaction() {
         let newList = []
-        for (let i=0; i<this.items.length; i++){
-            let newItem = {
-                _id: this.items[i]._id,
-                id: this.items[i].id,
-                description: this.items[i].description,
-                due_date: this.items[i].due_date,
-                assigned_to: this.items[i].assigned_to,
-                completed: this.items[i].completed
-            }
-            newList.push(newItem);
-        }
-		const {data} = await this.updateFunction2({ variables: {_id: this.listID, originalItems: newList}});
+        // for (let i=0; i<this.items.length; i++){
+        //     let newItem = {
+        //         _id: this.items[i]._id,
+        //         id: this.items[i].id,
+        //         description: this.items[i].description,
+        //         due_date: this.items[i].due_date,
+        //         assigned_to: this.items[i].assigned_to,
+        //         completed: this.items[i].completed
+        //     }
+        //     newList.push(newItem);
+        // }
+		const {data} = await this.updateFunction2({ variables: {_id: this.regionId, prevRegions: this.theSubregions}});
 		return data;
     }
 }
-export class ReorderItemsStatus_Transaction extends jsTPS_Transaction {   
-    constructor(listID, items, callback1, callback2) {
+export class ReorderRegionLeader_Transaction extends jsTPS_Transaction {  
+    constructor(regionId,theSubregions, callback1, callback2) {
         super();
-        this.listID = listID;
-        this.items = items
+        this.regionId = regionId;
+        this.theSubregions = theSubregions
 		this.updateFunction1 = callback1;
 		this.updateFunction2 = callback2;
 	}
     async doTransaction() {
-		const { data } = await this.updateFunction1({ variables: {_id: this.listID}});
+		const { data } = await this.updateFunction1({ variables: {_id: this.regionId}});
 		return data;
     }
     async undoTransaction() {
         let newList = []
-        for (let i=0; i<this.items.length; i++){
-            let newItem = {
-                _id: this.items[i]._id,
-                id: this.items[i].id,
-                description: this.items[i].description,
-                due_date: this.items[i].due_date,
-                assigned_to: this.items[i].assigned_to,
-                completed: this.items[i].completed
-            }
-            newList.push(newItem);
-        }
-		const {data} = await this.updateFunction2({ variables: {_id: this.listID, originalItems: newList}});
+        // for (let i=0; i<this.items.length; i++){
+        //     let newItem = {
+        //         _id: this.items[i]._id,
+        //         id: this.items[i].id,
+        //         description: this.items[i].description,
+        //         due_date: this.items[i].due_date,
+        //         assigned_to: this.items[i].assigned_to,
+        //         completed: this.items[i].completed
+        //     }
+        //     newList.push(newItem);
+        // }
+		const {data} = await this.updateFunction2({ variables: {_id: this.regionId, prevRegions: this.theSubregions}});
 		return data;
     }
 }
 export class ReorderItemsAssign_Transaction extends jsTPS_Transaction {   
-    constructor(listID, items, callback1, callback2) {
+    constructor(regionId, callback1, callback2) {
         super();
-        this.listID = listID;
-        this.items = items
+        this.regionId = regionId;
 		this.updateFunction1 = callback1;
 		this.updateFunction2 = callback2;
 	}
@@ -166,22 +165,18 @@ export class ReorderItemsAssign_Transaction extends jsTPS_Transaction {
 }
 
 export class EditItem_Transaction extends jsTPS_Transaction {
-	constructor(listID, itemID, field, prev, update, flag, callback) {
+	constructor(itemID, field, prev, update, callback) {
 		super();
-		this.listID = listID;
 		this.itemID = itemID;
 		this.field = field;
 		this.prev = prev;
 		this.update = update;
-		this.flag = flag;
 		this.updateFunction = callback;
 	}	
 
 	async doTransaction() {
 		const { data } = await this.updateFunction({ 
-				variables:{  itemId: this.itemID, _id: this.listID, 
-							 field: this.field, value: this.update, 
-							 flag: this.flag 
+				variables:{  itemId: this.itemID, field: this.field, value: this.update
 						  }
 			});
 		return data;
@@ -189,9 +184,7 @@ export class EditItem_Transaction extends jsTPS_Transaction {
 
     async undoTransaction() {
 		const { data } = await this.updateFunction({ 
-				variables:{ itemId: this.itemID, _id: this.listID, 
-							field: this.field, value: this.prev, 
-							flag: this.flag 
+				variables:{ itemId: this.itemID, field: this.field, value: this.prev
 						  }
 			});
 		return data;

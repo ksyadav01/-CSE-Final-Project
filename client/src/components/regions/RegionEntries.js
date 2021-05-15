@@ -6,30 +6,13 @@ import { GET_DB_REGION_ID } 				from '../../cache/queries';
 import { GET_DB_REGION } 				from '../../cache/queries';
 import { useMutation, useQuery, useLazyQuery } 		from '@apollo/client';
 
+import DeleteRegion 							from '../modals/DeleteRegion';
 const RegionEntries = (props) => {
-    console.log(props.data)
-    const history = useHistory();
-    //const { loading, error, data, refetch } = useQuery(GET_DB_REGION_ID, {variables: {_id: props.data},fetchPolicy: "no-cache"});
-    const { loading3, error3, data3 } = useQuery(GET_DB_REGION);
-    let region
-	if(loading3) { console.log(loading3, 'loading'); }
-	if(error3) { console.log(error3, 'error'); }
-    console.log("pp")
-    console.log(data3)
-    console.log(props.allRegions)
-    console.log("pp")
-    if(data3){
-        for(let places of data3.getAllRegions){
-            if(places._id==props.data){
-                region = places
-            }
-        }
-    }
-    console.log(region)
     //const { data } = props;
 
     //const completeStyle = data.completed ? ' complete-task' : ' incomplete-task';
-
+    let region = props.data
+    const history = useHistory();
     const name = region.name;
     const capital = region.capital
     const leader = region.leader
@@ -37,7 +20,15 @@ const RegionEntries = (props) => {
     const [editingName, toggleNameEdit] = useState(false);
     const [editingCapital, toggleCapitalEdit] = useState(false);
     const [editingLeader, toggleLeaderEdit] = useState(false);
-
+	const [showDelete, toggleDelete] 		= useState(false);
+    let landmarkDisplay
+    if(landmarks.length==0){
+        landmarkDisplay = "..."
+    }
+    else{
+        landmarkDisplay = landmarks[0] + ", ..."
+    }
+    let redirect = "/regionViewer/"+region._id
     const handleNameEdit = (e) => {
         toggleNameEdit(false);
         const newName = e.target.value ? e.target.value : 'No Name';
@@ -59,7 +50,16 @@ const RegionEntries = (props) => {
         props.editRegion(region._id, 'leader', newLeader, prevLeader);
     };
 
+    const setShowDelete = () => {
+		toggleDelete(!showDelete);
+	};
+    const handleDelete = () =>{
+        props.deleteRegion(region._id)
+        toggleDelete(!showDelete)
+    }
+
     return (
+        <WMMain>
         <WRow className='table-entry'>
             <WCol size="3">
                 {
@@ -90,7 +90,7 @@ const RegionEntries = (props) => {
                 }
             </WCol>
 
-            <WCol size="3">
+            <WCol size="2">
                 {
                     editingLeader ? <input
                         className='table-input' onBlur={handleLeaderEdit}
@@ -102,6 +102,19 @@ const RegionEntries = (props) => {
                         >{leader}
                         </div>
                 }
+            </WCol>
+            <WCol size="3">
+                <div className="table-text"
+                            onClick={()=>history.push(redirect)}
+                        >{landmarkDisplay}
+                    </div>
+            </WCol>
+            <WCol size="1">
+                <div className='button-group'>
+                    <WButton className="table-entry-buttons" onClick={setShowDelete} wType="texted">
+                        <i className="material-icons">close</i>
+                    </WButton>
+                </div>
             </WCol>
 {/* 
             <WCol size="3">
@@ -120,6 +133,12 @@ const RegionEntries = (props) => {
                 </div>
             </WCol> */}
         </WRow>
+        
+        {
+            showDelete && (<DeleteRegion fetchUser={props.fetchUser} setShowDelete={setShowDelete}
+                deleteRegion={handleDelete}/>)
+        }
+        </WMMain>
     );
 };
 

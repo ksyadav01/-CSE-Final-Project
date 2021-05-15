@@ -3,9 +3,7 @@ import MapEntries   from './MapEntries';
 
 const MapContents = (props) => {
 
-    const entries = props.activeMap ? props.activeMap : null;
-    console.log(props.activeMap)
-    console.log("dlkasklsadklnshdnlkhsdlknsnkjlsdknj")
+    const entries = props.maps ? props.maps : null;
     //const entries = props.activeMap ? props.activeMap : null;
     return (
         entries ? <div>
@@ -16,7 +14,7 @@ const MapContents = (props) => {
                         //deleteItem={props.deleteItem} reorderItem={props.reorderItem}
                         index={index}
                         //editItem={props.editItem}
-                        currentList={props.activeMap}
+                        maps={props.maps}
                         deleteMap={props.deleteMap}
                         updateMapName={props.updateMapName}
                     />

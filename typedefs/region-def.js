@@ -7,6 +7,8 @@ const typeDefs = gql `
         id: Int!
         name: String!
         leader: String!
+        types: String!
+		owner: String!
         capital: String!
         flag: String!
         landmarks: [String]
@@ -19,11 +21,14 @@ const typeDefs = gql `
     extend type Mutation {
         addRegion(region: RegionInput!, _id: String!, index: Int!): String
         createNewRegion(region: RegionInput!, parentId: String!): String
-        deleteRegion(regionId: String!, _id: String!): [Region]
-        updateRegionField(regionId: String!, _id: String!, field: String!, value: String!, flag: Int!): [Region]
-        reorderRegionName(_id: String!):[ Region]
-        reorderRegionCapital( _id: String!):[ Region]
-        reorderRegionLeader( _id: String!):[ Region]
+        deleteRegion(parentId: String!, _id: String!): Boolean
+		deleteMap(_id: String!): Boolean
+		updateRegionName(_id: String!, value: String!): String
+        updateRegionField(itemId: String!,field: String!, value: String!): String
+		reorderRegionFlipper( _id: String!, prevRegions: [String]!):String
+        reorderRegionName(_id: String!): String
+        reorderRegionCapital( _id: String!): String
+        reorderRegionLeader( _id: String!): String
         reorderRegionFlag( _id: String!):[ Region]
         reorderRegionLandmarks( _id: String!):[ Region]
     }
@@ -32,6 +37,8 @@ const typeDefs = gql `
         id: Int
         name: String
         leader: String
+        types: String
+		owner: String!
         capital: String
         flag: String
         landmarks: [String]

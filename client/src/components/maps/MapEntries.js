@@ -23,6 +23,10 @@ const MapEntries = (props) => {
         const { name, value } = e.target;
         props.updateMapName(props.data._id, value, preEdit);
     };
+    const handleDelete = (e) =>{
+        props.deleteMap(props.data._id);
+        e.stopPropagation()
+    }
     let id = props.data._id
     let redirect = "/regions/"+id
     return (
@@ -39,8 +43,9 @@ const MapEntries = (props) => {
                             {props.data.name}
                         </div>
             }
-            <div onClick={()=>props.deleteMap(props.data._id)}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;X</div>
+            <button onClick={handleDelete} style={{marginLeft: "100px"}}>X</button>
         </WMMain>
+        
     );
 };
 
