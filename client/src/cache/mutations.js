@@ -89,6 +89,16 @@ export const UPDATE_REGION_NAME = gql`
 		updateRegionName(_id: $_id, value: $value)
 	}
 `;
+export const UPDATE_REGION_LANDMARK = gql`
+	mutation UpdateRegionLandmark($_id: String!, $value: String!) {
+		updateRegionLandmark(_id: $_id, value: $value)
+	}
+`;
+export const DELETE_REGION_LANDMARK = gql`
+	mutation DeleteRegionLandmark($_id: String!, $value: String!) {
+		deleteRegionLandmark(_id: $_id, value: $value)
+	}
+`;
 export const UPDATE_ITEM_FIELD = gql`
 	mutation UpdateItemField($_id: String!, $itemId: String!, $field: String!, $value: String!, $flag: Int!) {
 		updateItemField(_id: $_id, itemId: $itemId, field: $field, value: $value, flag: $flag) {

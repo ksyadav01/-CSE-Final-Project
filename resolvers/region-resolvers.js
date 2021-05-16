@@ -9,15 +9,17 @@ module.exports = {
 	Query: {
 		getAllRegions: async (_, __, { req }) => {
 			const _id = new ObjectId(req.userId);
+			console.log("dndn")
 			if(!_id) { return([])};
 			//console.log(_id)
             //console.log("tester")
 			const region = await Region.find({owner: _id});
 
 			//console.log(region)
-            
+			console.log("dn")
             //console.log("tester")
 			if(region) return (region);
+			console.log("joe")
 		},
 		/** 
 		 	@param 	 {object} args - a todolist id
@@ -61,7 +63,7 @@ module.exports = {
                 const found = await Region.findOne({_id: parentId});
                 if(found){
                     subList = found.subregions;
-                    subList.push(objectId)
+                    subList.push(objectId.valueOf())
                     const updated2 = await Region.updateOne({_id: parentId}, {subregions: subList});
                     if(updated2){
                         console.log("Updated the subregion list for region")
@@ -70,7 +72,7 @@ module.exports = {
                 }
             }
 			if(updated){
-				return objectId;
+				return objectId.valueOf();
 			}
 			return ("can't add region");
 		},
@@ -91,6 +93,17 @@ module.exports = {
 			if(deleted) return true;
 			else return false;
 		},
+		deleteRegionLandmark: async (_, args) => {
+			const {value, _id } = args;
+			const objectId = new ObjectId(_id);
+			const found = await Region.findOne({_id: objectId});
+			let lst = found.landmarks
+			let index = lst.indexOf(value)
+			lst.splice(index, 1)
+			const updated = await Region.updateOne({_id: objectId}, {landmarks: lst});
+			if(updated) return value;
+			else return "";
+		},
 		/** 
 		 	@param 	 {object} args - a todolist objectID 
 			@returns {boolean} true on successful delete, false on failure
@@ -110,6 +123,16 @@ module.exports = {
 			const {value, _id } = args;
 			const objectId = new ObjectId(_id);
 			const updated = await Region.updateOne({_id: objectId}, {name: value});
+			if(updated) return value;
+			else return "";
+		},
+		updateRegionLandmark: async (_, args) => {
+			const {value, _id } = args;
+			const objectId = new ObjectId(_id);
+			const found = await Region.findOne({_id: objectId});
+			let lst = found.landmarks
+			lst.push(value)
+			const updated = await Region.updateOne({_id: objectId}, {landmarks: lst});
 			if(updated) return value;
 			else return "";
 		},

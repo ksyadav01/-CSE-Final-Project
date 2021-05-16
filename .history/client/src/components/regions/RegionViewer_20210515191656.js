@@ -2,8 +2,6 @@ import React, { useState, useEffect } 	from 'react';
 import WMMain from 'wt-frontend/build/components/wmodal/WMMain';
 import Logo 							from '../navbar/Logo';
 import NavbarOptions 					from '../navbar/NavbarOptions';
-import RegionContents 					from '../regions/RegionContents';
-import DeleteRegion 							from '../modals/DeleteRegion';
 import { WLayout, WLHeader, WLMain, WLSide, WNavbar, WNavItem  } from 'wt-frontend';
 import { useHistory, useParams } from 'react-router-dom';
 import WInput from 'wt-frontend/build/components/winput/WInput';
@@ -12,27 +10,25 @@ import { GET_DB_MAPS } 				from '../../cache/queries';
 import * as mutations 					from '../../cache/mutations';
 import { useMutation, useQuery } 		from '@apollo/client';
 import WButton from 'wt-frontend/build/components/wbutton/WButton';
-import RegionEntries   from './RegionEntries';
-import RegionHeader   from './RegionHeader';
+import StonyFlag from "./stonybrook.jpg"
 import { EditItem_Transaction,
 	ReorderRegionName_Transaction,
 	ReorderRegionCapital_Transaction, 
 	ReorderRegionLeader_Transaction } from '../../utils/jsTPS';
+import WRow from 'wt-frontend/build/components/wgrid/WRow';
 
-const Regions = (props) => {
+const RegionViewer = (props) => {
     console.log("DOES IT WORK MANNN")
     const history = useHistory();
-	const [activeMap, setActiveMap] 		= useState(false);
-	const [CreateNewRegion] 		= useMutation(mutations.CREATE_NEW_REGION);
-	const [DeleteRegion] 		= useMutation(mutations.DELETE_REGION);
-	const [UpdateRegionField] 	= useMutation(mutations.UPDATE_REGION_FIELD);
-	const [ReorderRegionName] 		= useMutation(mutations.REORDER_REGION_NAME);
-	const [ReorderRegionFlipper] 		= useMutation(mutations.REORDER_REGION_FLIPPER);
-	const [ReorderRegionCapital] 		= useMutation(mutations.REORDER_REGION_CAPITAL);
-	const [ReorderRegionLeader] 		= useMutation(mutations.REORDER_REGION_LEADER);
+
+	const [UpdateRegionLandmark] 		= useMutation(mutations.UPDATE_REGION_LANDMARK);
+	const [DeleteRegionLandmark] 		= useMutation(mutations.DELETE_REGION_LANDMARK);
 	//const [UpdateNameMap] 	= useMutation(mutations.UPDATE_MAP_NAME);
-    const {id} = useParams();
-    let currentRegionMap
+    const {ids} = useParams();
+    const id= ids
+    console.log(ids)
+    let currentRegionMap;
+    let totalLandmarks;
     let maps = []
     let regions = []
     let subregionsIndex = []
@@ -65,6 +61,7 @@ const Regions = (props) => {
             }
         }
     }
+    console.log(regions)
 
 	const auth = props.user === null ? false : true;
     const refetchRegions = async (refetch) => {
@@ -104,22 +101,22 @@ const Regions = (props) => {
         //history.push(redirect)        
     }
 
-    const createNewRegion = async (name) =>{
-        console.log("Creating New Region")
-        console.log(currentRegionMap)
-        let regions = {
-            _id: "",
-            id: 1123,
-            name: "Enter Name",
-            capital: "Enter Capital",
-            types: "region",
-            leader: "Enter Leader",
-            owner: props.user._id,
-            flag: "Insert Flag Here",
-            landmarks: [],
-            subregions: []
-        }
-        const { data } = await CreateNewRegion({variables: {region: regions, parentId: currentRegionMap._id}, refetchQueries: {query: GET_DB_REGION}});
+    const addLandmark = async (name) =>{
+        console.log("Creating landmark")
+        // let regions = {
+        //     _id: "",
+        //     id: 1123,
+        //     name: "Enter Name",
+        //     capital: "Enter Capital",
+        //     types: "region",
+        //     leader: "Enter Leader",
+        //     owner: props.user._id,
+        //     flag: "Insert Flag Here",
+        //     landmarks: [],
+        //     subregions: []
+        // }
+        const { data } = await UpdateRegionLandmark({variables: {value: name, _id: currentRegionMap._id}, 
+            refetchQueries: {query: GET_DB_REGION}});
         
         await refetchRegions(refetch)
         // if(data) {
@@ -127,41 +124,15 @@ const Regions = (props) => {
         // }
     }
 	
-	const deleteRegion = async (_id) => {
+	const deleteLandmark = async (name) => {
 		//props.tps.clearAllTransactions();
-		DeleteRegion({ variables: { _id: _id, parentId: currentRegionMap._id}, refetchQueries: [{ query: GET_DB_REGION }] });
-
+		//DeleteRegion({ variables: { _id: _id, parentId: currentRegionMap._id}, refetchQueries: [{ query: GET_DB_REGION }] });
+        const { data } = await DeleteRegionLandmark({variables: {value: name, _id: currentRegionMap._id}, 
+            refetchQueries: {query: GET_DB_REGION}});
+        
 		refetchRegions(refetch);
-        console.log("Region Deleted")
+        console.log("Landmark Deleted")
 		//setActiveList({});
-
-	};
-    const editRegion = async (itemID, field, value, prev) => {
-		let transaction = new EditItem_Transaction(itemID, field, prev, value, UpdateRegionField);
-		props.tps.addTransaction(transaction);
-		tpsRedo();
-
-	};
-	const reorderName = async () => {
-		let regionId = currentRegionMap._id
-		let transaction = new ReorderRegionName_Transaction(regionId, subregionsIndex, ReorderRegionName, ReorderRegionFlipper);
-		props.tps.addTransaction(transaction);
-        await refetchRegions(refetch);
-		tpsRedo();
-
-	};
-	const reorderCapital = async () => {
-		let regionId = currentRegionMap._id
-		let transaction = new ReorderRegionCapital_Transaction(regionId, subregionsIndex,  ReorderRegionCapital, ReorderRegionFlipper);
-		props.tps.addTransaction(transaction);
-		tpsRedo();
-
-	};
-	const reorderLeader = async () => {
-		let regionId = currentRegionMap._id
-		let transaction = new ReorderRegionLeader_Transaction(regionId, subregionsIndex,  ReorderRegionLeader, ReorderRegionFlipper);
-		props.tps.addTransaction(transaction);
-		tpsRedo();
 
 	};
 	const tpsUndo = async () => {
@@ -183,9 +154,10 @@ const Regions = (props) => {
 	};
     //console.log(JSON.stringify(subregions,undefined,2))
     const entries = theSubregions ? theSubregions : null;
-    console.log("heh")
-    console.log(theSubregions)
-    console.log("heh")
+    console.log("heh2")
+    console.log(maps)
+    refetchRegions(refetch)
+    console.log("heh2")
     return (
         <WLayout>
             <WLHeader>
@@ -204,38 +176,23 @@ const Regions = (props) => {
 				</WNavbar>
 			</WLHeader>
             <WMMain>
-                <div style={{display: 'flex', justifyContent: "center", alignItems: "center"}}>
+                <div style={{width: "100%", height: "800px", border: "5px solid red"}}>
+                    <div style={{marginleft: "100px", width: "500px", height: "600px", border: "5px solid black", color: "white"}}>
+                        <img style={{width: "400px", marginLeft:"50px"}} src={StonyFlag}></img>
+                        Region Name: {currentRegionMap.name}
+                        Parent Region: {currentRegionMap.name}
+                    </div>
+                </div>
+                {/* <div style={{display: 'flex', justifyContent: "center", alignItems: "center"}}>
                     <div style={{marginTop: "10px", width: "100%", height: "900px", border: "5px solid black",
                         backgroundColor: "#d48f53"}}>
                         <div style={{width: "100%", height: "75px", backgroundColor: "black", textAlign: "center", 
                             color: "white", fontSize: "30px"}}>
                             Your Maps
-                            {/* <div style={{marginLeft: "590px", marginTop: "63px"}}>
-				                <img style={{width: "400px"}} ></img>
-                                <div style={{border: "5px solid black", backgroundColor: "#f87f0f", width: "405px", height: "95px",
-                                    marginTop: "-7px", textAlign: "center", display: "flex", justifyContent: "center", 
-                                    alignItems: "center", fontSize: "50px"}} onClick={createNewRegion} >
-                                        Create New Map
-                                    </div>
-                            </div> */}
                             
                             
                         </div>
-                        {/* {entries} ? <div>
-                            {
-                                entries.map((entry, index) => (
-                                    <RegionEntries
-                                        data={entry}
-                                        key={entry._id}
-                                        index={index}
-                                        deleteRegion={props.deleteRegion}
-                                        updateMapName={props.updateMapName}
-                                    />
-                                ))
-                            }
-
-                            </div>
-                            : <div className='container-primary' /> */}
+                        
                         <RegionHeader
                                  createNewRegion = {createNewRegion}tps={props.tps} reorderName={reorderName} 
                                  reorderCapital={reorderCapital} reorderLeader={reorderLeader} undo = {tpsUndo} redo = {tpsRedo}
@@ -248,7 +205,7 @@ const Regions = (props) => {
                         </RegionContents>
                     </div>
                     
-                </div>
+                </div> */}
             </WMMain>
             {/* {
 				showCreateMap && (<NewMap fetchUser={props.fetchUser} createNewMap={createNewMap} setShowCreateMap={setShowCreateMap} />)
@@ -257,4 +214,4 @@ const Regions = (props) => {
     );
 };
 
-export default Regions;
+export default RegionViewer;

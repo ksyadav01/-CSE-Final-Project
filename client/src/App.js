@@ -5,6 +5,7 @@ import LoginScreen 		from './components/LoginScreen/LoginScreen';
 import UpdateAccount 		from './components/UpdateAccountScreen/UpdateAccountScreen';
 import Maps 		from './components/maps/Maps';
 import Regions 		from './components/regions/Regions';
+import RegionViewer 		from './components/regions/RegionViewer';
 import { useQuery } 	from '@apollo/client';
 import * as queries 	from './cache/queries';
 import { jsTPS } 		from './utils/jsTPS';
@@ -75,7 +76,16 @@ const App = () => {
 				 		<Regions tps={transactionStack} fetchUser={refetch} user={user} />
 				 	} 
 				/>
-				<Route/>
+
+				<Route 
+					path="/regionViewer/:ids" 
+					name="regionViewer" 
+					//component={Regions}
+				 	render={() => 
+				 		<RegionViewer tps={transactionStack} fetchUser={refetch} user={user} />
+				 	} 
+				/>
+				
 			</Switch>
 		</BrowserRouter>
 	);

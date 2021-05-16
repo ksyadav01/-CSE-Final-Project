@@ -24,6 +24,8 @@ const typeDefs = gql `
         deleteRegion(parentId: String!, _id: String!): Boolean
 		deleteMap(_id: String!): Boolean
 		updateRegionName(_id: String!, value: String!): String
+		updateRegionLandmark(_id: String!, value: String!): String
+		deleteRegionLandmark(_id: String!, value: String!): String
         updateRegionField(itemId: String!,field: String!, value: String!): String
 		reorderRegionFlipper( _id: String!, prevRegions: [String]!):String
         reorderRegionName(_id: String!): String
