@@ -240,7 +240,7 @@ const RegionViewer = (props) => {
                                 style={{border: "10px solid red", width: '600px', height: 'auto', zIndex: '1'}}>
                             </ViewerContents>
                         </div>
-                        <div style={{marginLeft: "250px", width: "500px", height: "75px", color: "white"}}>
+                        <div style={{marginLeft: "250px", width: "500px", height: "75px", border: "5px solid black", color: "white"}}>
                             <div style={{marginLeft: "50px", whiteSpace: "nowrap"}}>
                                 Enter Landmark name here
                             </div>

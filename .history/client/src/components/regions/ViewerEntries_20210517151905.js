@@ -51,7 +51,7 @@ const ViewerEntries = (props) => {
             </WCol>
             <WCol size="2">
                 <div className='button-group'>
-                    <WButton className="table-entry-buttons" onClick={()=>props.deleteLandmark(region)} wType="texted">
+                    <WButton className="table-entry-buttons" onClick={()=>props.deleteLandmark} wType="texted">
                         <i className="material-icons">close</i>
                     </WButton>
                 </div>

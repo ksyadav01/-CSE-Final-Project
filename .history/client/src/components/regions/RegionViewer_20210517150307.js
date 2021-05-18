@@ -9,7 +9,6 @@ import WInput from 'wt-frontend/build/components/winput/WInput';
 import { GET_DB_REGION } 				from '../../cache/queries';
 import { GET_DB_MAPS } 				from '../../cache/queries';
 import * as mutations 					from '../../cache/mutations';
-import * as queries 					from '../../cache/queries';
 import { useMutation, useQuery } 		from '@apollo/client';
 import WButton from 'wt-frontend/build/components/wbutton/WButton';
 import StonyFlag from "./stonybrook.jpg"
@@ -36,8 +35,8 @@ const RegionViewer = (props) => {
     let theSubregions; // All subregions
     let totalLandmarks;
     let parentReg;
-    let addLandmarkPlaceholder = "";
-    const { loading, error, data, refetch } = useQuery(queries.GET_DB_REGION);
+    let addLandmarkPlaceholder;
+    const { loading, error, data, refetch } = useQuery(GET_DB_REGION,{fetchPolicy: "network-only"});
         if(loading) { console.log(loading, 'loading'); }
         if(error) { console.log(error, 'error'); }
         let temp
@@ -130,14 +129,7 @@ const RegionViewer = (props) => {
         console.log(subregionsIndex)
         //history.push(redirect)        
     }
-    const landmarkAdder = async (e) =>{
-        console.log("add landmark here")
-        
-        toggleLandmarkEdit(false);
-        addLandmarkPlaceholder  = e.target.value
-        
-        await refetchRegions(refetch)
-    };
+
     const addLandmark = async (e) =>{
         console.log("Creating landmark")
         // let regions = {
@@ -152,18 +144,17 @@ const RegionViewer = (props) => {
         //     landmarks: [],
         //     subregions: []
         // }
-        //addLandmarkPlaceholder = e.target.value
-        //if(ad)
-        toggleLandmarkEdit(false);
-         const { data } = await UpdateRegionLandmark({variables: {value: e.target.value, _id: currentRegionMap._id}, 
-             refetchQueries: {query: GET_DB_REGION}});
         
-         await refetchRegions(refetch)
+        toggleNameEdit(false);
+        addLandmarkPlaceholder = "";
+        const { data } = await UpdateRegionLandmark({variables: {value: e.target.value, _id: currentRegionMap._id}, 
+            refetchQueries: {query: GET_DB_REGION}});
         
+        await refetchRegions(refetch)
         // if(data) {
         //     setActiveMap(data.CREATE_NEW_REGION);
         // }
-    };
+    }
 	
 	const deleteLandmark = async (name) => {
 		//props.tps.clearAllTransactions();
@@ -217,8 +208,8 @@ const RegionViewer = (props) => {
 				</WNavbar>
 			</WLHeader>
             <WMMain>
-                <div style={{ display: "flex", alignItems: "center", width: "100%", height: "800px", border: "5px solid red"}}>
-                    <div style={{marginLeft: "200px", width: "500px", height: "600px", border: "5px solid black", color: "white"}}>
+                <div style={{width: "100%", height: "800px", border: "5px solid red"}}>
+                    <div style={{marginleft: "200px", width: "500px", height: "600px", border: "5px solid black", color: "white"}}>
                         <img style={{width: "400px", marginLeft:"50px"}} src={StonyFlag}></img>
                         <br></br><br></br><br></br>
                         <div style={{fontSize: "20", marginLeft: "50px"}}>
@@ -231,33 +222,6 @@ const RegionViewer = (props) => {
                             Region Leader: {currentRegionMap.leader}
                             <br></br><br></br><br></br>
                             Number of Sub Regions: {currentRegionMap.subregions.length}
-                        </div>
-                    </div>
-                    <div>
-                        <div style={{marginLeft: "250px", width: "500px", height: "525px", border: "5px solid black", color: "white", overflowY:"scroll"}}>
-                            
-                            <ViewerContents allregions={regions}landmarks={totalLandmarks} deleteLandmark={deleteLandmark} addLandmark = {addLandmark}
-                                style={{border: "10px solid red", width: '600px', height: 'auto', zIndex: '1'}}>
-                            </ViewerContents>
-                        </div>
-                        <div style={{marginLeft: "250px", width: "500px", height: "75px", color: "white"}}>
-                            <div style={{marginLeft: "50px", whiteSpace: "nowrap"}}>
-                                Enter Landmark name here
-                            </div>
-                                <div style={{width:"400px", marginLeft:"50px"}}>
-                                    {
-                                    editLandmark ? <input
-                                         className='table-input' onBlur={addLandmark}
-                                        autoFocus={true} defaultValue={""} type='text'
-                                        wType="outlined" barAnimation="solid" inputClass="table-input-class"
-                                    />
-                                        : <div className="table-text" style={{backgroundColor: "white", color: "black", fontSize:"10px"}}
-                                            onClick={() => toggleLandmarkEdit(!editLandmark)}
-                                        >Enter Landmark name here! (Simply click out of the box to add it)
-                                        </div>
-                                    }
-                                    <div style={{color:"green"}} onClick={()=>addLandmark()}>Submit</div>
-                                </div>
                         </div>
                     </div>
                 </div>
@@ -284,7 +248,24 @@ const RegionViewer = (props) => {
                     </div>
                     
                 </div> */}
-                
+                <div>
+                    <div>
+                        {
+                        editLandmark ? <input
+                            className='table-input' onBlur={addLandmark}
+                            autoFocus={true} defaultValue={addLandmarkPlaceholder} type='text'
+                            wType="outlined" barAnimation="solid" inputClass="table-input-class"
+                        />
+                            : <div className="table-text"
+                                onClick={() => toggleLandmarkEdit(!editLandmark)}
+                            >{addLandmarkPlaceholder}
+                            </div>
+                        }
+                    </div>
+                    <ViewerContents allregions={regions}landmarks={totalLandmarks} deleteLandmark={deleteLandmark} addLandmark = {addLandmark}
+                        style={{border: "10px solid red", width: '600px', height: 'auto', zIndex: '1'}}>
+                    </ViewerContents>
+                </div>
             </WMMain>
             {/* {
 				showCreateMap && (<NewMap fetchUser={props.fetchUser} createNewMap={createNewMap} setShowCreateMap={setShowCreateMap} />)

@@ -36,7 +36,7 @@ const RegionViewer = (props) => {
     let theSubregions; // All subregions
     let totalLandmarks;
     let parentReg;
-    let addLandmarkPlaceholder = "";
+    let addLandmarkPlaceholder;
     const { loading, error, data, refetch } = useQuery(queries.GET_DB_REGION);
         if(loading) { console.log(loading, 'loading'); }
         if(error) { console.log(error, 'error'); }
@@ -138,7 +138,7 @@ const RegionViewer = (props) => {
         
         await refetchRegions(refetch)
     };
-    const addLandmark = async (e) =>{
+    const addLandmark = async () =>{
         console.log("Creating landmark")
         // let regions = {
         //     _id: "",
@@ -155,8 +155,9 @@ const RegionViewer = (props) => {
         //addLandmarkPlaceholder = e.target.value
         //if(ad)
         toggleLandmarkEdit(false);
-         const { data } = await UpdateRegionLandmark({variables: {value: e.target.value, _id: currentRegionMap._id}, 
+         const { data } = await UpdateRegionLandmark({variables: {value: addLandmarkPlaceholder, _id: currentRegionMap._id}, 
              refetchQueries: {query: GET_DB_REGION}});
+         addLandmarkPlaceholder = "";
         
          await refetchRegions(refetch)
         
@@ -234,26 +235,26 @@ const RegionViewer = (props) => {
                         </div>
                     </div>
                     <div>
-                        <div style={{marginLeft: "250px", width: "500px", height: "525px", border: "5px solid black", color: "white", overflowY:"scroll"}}>
+                        <div style={{marginLeft: "250px", width: "500px", height: "525px", border: "5px solid black", color: "white"}}>
                             
                             <ViewerContents allregions={regions}landmarks={totalLandmarks} deleteLandmark={deleteLandmark} addLandmark = {addLandmark}
                                 style={{border: "10px solid red", width: '600px', height: 'auto', zIndex: '1'}}>
                             </ViewerContents>
                         </div>
-                        <div style={{marginLeft: "250px", width: "500px", height: "75px", color: "white"}}>
+                        <div style={{marginLeft: "250px", width: "500px", height: "75px", border: "5px solid black", color: "white"}}>
                             <div style={{marginLeft: "50px", whiteSpace: "nowrap"}}>
                                 Enter Landmark name here
                             </div>
                                 <div style={{width:"400px", marginLeft:"50px"}}>
                                     {
                                     editLandmark ? <input
-                                         className='table-input' onBlur={addLandmark}
-                                        autoFocus={true} defaultValue={""} type='text'
+                                         className='table-input' onBlur={landmarkAdder}
+                                        autoFocus={true} defaultValue={addLandmarkPlaceholder} type='text'
                                         wType="outlined" barAnimation="solid" inputClass="table-input-class"
                                     />
-                                        : <div className="table-text" style={{backgroundColor: "white", color: "black", fontSize:"10px"}}
+                                        : <div className="table-text" style={{backgroundColor: "white", color: "black"}}
                                             onClick={() => toggleLandmarkEdit(!editLandmark)}
-                                        >Enter Landmark name here! (Simply click out of the box to add it)
+                                        >{addLandmarkPlaceholder}
                                         </div>
                                     }
                                     <div style={{color:"green"}} onClick={()=>addLandmark()}>Submit</div>

@@ -22,11 +22,11 @@ const ViewerEntries = (props) => {
     const [editingLeader, toggleLeaderEdit] = useState(false);
 	const [showDelete, toggleDelete] 		= useState(false);
     let landmarkDisplay
-    if(region.length==0){
+    if(landmarks.length==0){
         landmarkDisplay = "..."
     }
     else{
-        landmarkDisplay = region[0] + ", ..."
+        landmarkDisplay = landmarks[0] + ", ..."
     }
     let redirect = "/regionViewer/"+region._id
     
@@ -42,21 +42,25 @@ const ViewerEntries = (props) => {
     return (
         <WMMain>
         <WRow className='table-entry'>
-            <WCol size="10">
+            <WCol size="3">
                 <div className="table-text"
                             onClick={()=>history.push(redirect)}
                         >{region}
-                        
                     </div>
             </WCol>
-            <WCol size="2">
+            <WCol size="1">
                 <div className='button-group'>
-                    <WButton className="table-entry-buttons" onClick={()=>props.deleteLandmark(region)} wType="texted">
+                    <WButton className="table-entry-buttons" onClick={setShowDelete} wType="texted">
                         <i className="material-icons">close</i>
                     </WButton>
                 </div>
             </WCol>
         </WRow>
+        
+        {
+            showDelete && (<DeleteRegion fetchUser={props.fetchUser} setShowDelete={setShowDelete}
+                deleteRegion={handleDelete}/>)
+        }
         </WMMain>
     );
 };

@@ -234,13 +234,13 @@ const RegionViewer = (props) => {
                         </div>
                     </div>
                     <div>
-                        <div style={{marginLeft: "250px", width: "500px", height: "525px", border: "5px solid black", color: "white", overflowY:"scroll"}}>
+                        <div style={{marginLeft: "250px", width: "500px", height: "525px", border: "5px solid black", color: "white", overflow:"scroll"}}>
                             
                             <ViewerContents allregions={regions}landmarks={totalLandmarks} deleteLandmark={deleteLandmark} addLandmark = {addLandmark}
                                 style={{border: "10px solid red", width: '600px', height: 'auto', zIndex: '1'}}>
                             </ViewerContents>
                         </div>
-                        <div style={{marginLeft: "250px", width: "500px", height: "75px", color: "white"}}>
+                        <div style={{marginLeft: "250px", width: "500px", height: "75px", border: "5px solid black", color: "white"}}>
                             <div style={{marginLeft: "50px", whiteSpace: "nowrap"}}>
                                 Enter Landmark name here
                             </div>
