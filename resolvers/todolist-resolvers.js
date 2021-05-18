@@ -77,7 +77,6 @@ module.exports = {
 							 array on failure
 		**/
 		deleteItem: async (_, args) => {
-			console.log("dfssimone sucksnklsdakjnsd")
 			const  { _id, itemId } = args;
 			const listId = new ObjectId(_id);
 			const found = await Todolist.findOne({_id: listId});
