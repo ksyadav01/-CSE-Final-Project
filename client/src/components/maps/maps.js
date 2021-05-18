@@ -123,9 +123,12 @@ const Maps = (props) => {
                             
                             
                         </div>
+                        <div style={{overflowY: "scroll", overflowX: "hidden", height: "490px", width: "590px"}}>
                         <MapContents maps={maps} deleteMap={deleteMap} updateMapName={updateMapName}
-                        style={{border: "10px solid red", width: '600px', height: 'auto', zIndex: '1'}}>
+                            style={{border: "10px solid red", width: '600px', height: 'auto', zIndex: '1'}}
+                            >
                         </MapContents>
+                        </div>
                     </div>
                     
                 </div>

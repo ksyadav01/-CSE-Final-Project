@@ -18,15 +18,20 @@ const RegionHeader = (props) => {
                 <WButton className='table-header-section' wType="texted" onClick={props.reorderName} >Name</WButton>
             </WCol>
 
-            <WCol size="3">
+            <WCol size="2">
                 <WButton className='table-header-section' wType="texted" onClick={props.reorderCapital} >&nbsp;Capital</WButton>
             </WCol>
 
             <WCol size="2">
                 <WButton className='table-header-section' wType="texted" onClick={props.reorderLeader} >&nbsp;&nbsp;&nbsp;Leader</WButton>
             </WCol>
+            
 
             <WCol size="1">
+                <WButton className='table-header-section' wType="texted" >&nbsp;&nbsp;Flags</WButton>
+            </WCol>
+
+            <WCol size="2">
                 <WButton className='table-header-section' wType="texted" >&nbsp;&nbsp;Landmarks</WButton>
             </WCol>
 
@@ -37,7 +42,7 @@ const RegionHeader = (props) => {
             </WCol> */}
 
            
-            <WCol size="2">
+            <WCol size="1">
                 <div className="table-header-buttons">
                     <WButton className="sidebar-buttons undo-redo" onClick={props.undo} wType="texted" clickAnimation="ripple-light" 
                         shape="rounded" style={props.tps.getUndoSize()==0 ? {color: "black", pointerEvents:"none"} 

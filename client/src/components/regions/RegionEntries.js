@@ -5,6 +5,7 @@ import WMMain from 'wt-frontend/build/components/wmodal/WMMain';
 import { GET_DB_REGION_ID } 				from '../../cache/queries';
 import { GET_DB_REGION } 				from '../../cache/queries';
 import { useMutation, useQuery, useLazyQuery } 		from '@apollo/client';
+import StonyFlag from "./stonybrook.jpg"
 
 import DeleteRegion 							from '../modals/DeleteRegion';
 const RegionEntries = (props) => {
@@ -76,7 +77,7 @@ const RegionEntries = (props) => {
                 }
             </WCol>
 
-            <WCol size="3">
+            <WCol size="2">
                 {
                     editingCapital ? <input
                         className='table-input' onBlur={handleCapitalEdit}
@@ -102,6 +103,9 @@ const RegionEntries = (props) => {
                         >{leader}
                         </div>
                 }
+            </WCol>
+            <WCol size="1">
+                <img style={{width: "50px"}} src={StonyFlag}></img>
             </WCol>
             <WCol size="3">
                 <div className="table-text"

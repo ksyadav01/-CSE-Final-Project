@@ -205,8 +205,8 @@ const Regions = (props) => {
 			</WLHeader>
             <WMMain>
                 <div style={{display: 'flex', justifyContent: "center", alignItems: "center"}}>
-                    <div style={{marginTop: "10px", width: "100%", height: "900px", border: "5px solid black",
-                        backgroundColor: "#d48f53"}}>
+                    <div style={{marginTop: "10px", width: "100%", height: "850px", border: "5px solid black",
+                        backgroundColor: "#d48f53", overflowY:"scroll"}}>
                         <div style={{width: "100%", height: "75px", backgroundColor: "black", textAlign: "center", 
                             color: "white", fontSize: "30px"}}>
                             Your Maps

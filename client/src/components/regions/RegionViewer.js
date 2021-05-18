@@ -41,9 +41,6 @@ const RegionViewer = (props) => {
         if(loading) { console.log(loading, 'loading'); }
         if(error) { console.log(error, 'error'); }
         let temp
-        console.log("deez nuts")
-        console.log(loading)
-        console.log("deez nuts")
 		if(data) { 
             console.log("works")
             theSubregions=[]
@@ -58,7 +55,6 @@ const RegionViewer = (props) => {
                 }
                 regions.push(places)
                 if(places._id==ids){
-                    console.log("joemamamama")
                     currentRegionMap = places
                     subregionsIndex = places.subregions
                 }
@@ -217,8 +213,8 @@ const RegionViewer = (props) => {
 				</WNavbar>
 			</WLHeader>
             <WMMain>
-                <div style={{ display: "flex", alignItems: "center", width: "100%", height: "800px", border: "5px solid red"}}>
-                    <div style={{marginLeft: "200px", width: "500px", height: "600px", border: "5px solid black", color: "white"}}>
+                <div style={{ display: "flex", alignItems: "center", width: "100%", height: "800px"}}>
+                    <div style={{marginLeft: "200px", width: "500px", height: "600px", border: "5px solid black", borderRadius: "10px", color: "white"}}>
                         <img style={{width: "400px", marginLeft:"50px"}} src={StonyFlag}></img>
                         <br></br><br></br><br></br>
                         <div style={{fontSize: "20", marginLeft: "50px"}}>
@@ -234,13 +230,14 @@ const RegionViewer = (props) => {
                         </div>
                     </div>
                     <div>
-                        <div style={{marginLeft: "250px", width: "500px", height: "525px", border: "5px solid black", color: "white", overflowY:"scroll"}}>
+                        <div style={{marginLeft: "250px", width: "500px", height: "525px", borderRadius: "10px",
+                             border: "5px solid black", color: "white", overflowY:"scroll"}}>
                             
                             <ViewerContents allregions={regions}landmarks={totalLandmarks} deleteLandmark={deleteLandmark} addLandmark = {addLandmark}
                                 style={{border: "10px solid red", width: '600px', height: 'auto', zIndex: '1'}}>
                             </ViewerContents>
                         </div>
-                        <div style={{marginLeft: "250px", width: "500px", height: "75px", color: "white"}}>
+                        <div style={{marginLeft: "250px", width: "500px", height: "75px", color: "white", borderRadius: "10px"}}>
                             <div style={{marginLeft: "50px", whiteSpace: "nowrap"}}>
                                 Enter Landmark name here
                             </div>

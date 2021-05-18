@@ -9,17 +9,14 @@ module.exports = {
 	Query: {
 		getAllRegions: async (_, __, { req }) => {
 			const _id = new ObjectId(req.userId);
-			console.log("dndn")
 			if(!_id) { return([])};
 			//console.log(_id)
             //console.log("tester")
 			const region = await Region.find({owner: _id});
 
 			//console.log(region)
-			console.log("dn")
             //console.log("tester")
 			if(region) return (region);
-			console.log("joe")
 		},
 		/** 
 		 	@param 	 {object} args - a todolist id
